@@ -1,13 +1,13 @@
 Program CN
     real*8, dimension(:,:),allocatable:: matriz, banda
-    real*8, dimension(:,:),allocatable:: l,d
+    real*8, dimension(:),allocatable:: b
 
 
     ! numero de puntos
     write(*,*) "Introduzca el número de puntos:"
     write(*,'(5x,a)') "n"
     n = 6
-    allocate(matriz(n,n),l(n,n),d(n,n))
+    allocate(matriz(n,n),b(n))
 
     do i=1,n
         do j=1,n
@@ -18,47 +18,54 @@ Program CN
     end do
 
     ! matriz de prueba
-    matriz(1,1) = 1
+    matriz(1,1) = 7
     matriz(1,2) = 2
-    matriz(1,3) = 3
-    matriz(1,4) = 4
-    matriz(1,5) = 5
-    matriz(1,6) = 6
+    matriz(1,3) = 0
+    matriz(1,4) = 3
+    matriz(1,5) = 0
+    matriz(1,6) = 0
 
     matriz(2,1) = 2
-    matriz(2,2) = 1
+    matriz(2,2) = 7
     matriz(2,3) = 2
-    matriz(2,4) = 3
-    matriz(2,5) = 4
-    matriz(2,6) = 5
+    matriz(2,4) = 0
+    matriz(2,5) = 3
+    matriz(2,6) = 0
 
-    matriz(3,1) = 3
+    matriz(3,1) = 0
     matriz(3,2) = 2
-    matriz(3,3) = 1
+    matriz(3,3) = 7
     matriz(3,4) = 2
-    matriz(3,5) = 3
-    matriz(3,6) = 4
+    matriz(3,5) = 0
+    matriz(3,6) = 3
 
-    matriz(4,1) = 4
-    matriz(4,2) = 3
+    matriz(4,1) = 3
+    matriz(4,2) = 0
     matriz(4,3) = 2
-    matriz(4,4) = 1
+    matriz(4,4) = 7
     matriz(4,5) = 2
-    matriz(4,6) = 3
+    matriz(4,6) = 0
 
-    matriz(5,1) = 5
-    matriz(5,2) = 4
-    matriz(5,3) = 3
+    matriz(5,1) = 0
+    matriz(5,2) = 3
+    matriz(5,3) = 0
     matriz(5,4) = 2
-    matriz(5,5) = 1
+    matriz(5,5) = 7
     matriz(5,6) = 2
 
-    matriz(6,1) = 6
-    matriz(6,2) = 5
-    matriz(6,3) = 4
-    matriz(6,4) = 3
+    matriz(6,1) = 0
+    matriz(6,2) = 0
+    matriz(6,3) = 3
+    matriz(6,4) = 0
     matriz(6,5) = 2
-    matriz(6,6) = 1
+    matriz(6,6) = 7
+
+    b(1) = 1
+    b(2) = 2
+    b(3) = 3
+    b(4) = 4
+    b(5) = 5
+    b(6) = 6
 
     call printMatrix(matriz,n)
     call linea
