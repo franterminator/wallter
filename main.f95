@@ -1,12 +1,13 @@
 Program CN
     real*8, dimension(:,:),allocatable:: matriz
-
+    real*8, dimension(:),allocatable:: b
+    integer:: i
 
     ! numero de puntos
     write(*,*) "Introduzca el número de puntos:"
     write(*,'(5x,a)') "n"
     n = 6
-    allocate(matriz(n,n))
+    allocate(matriz(n,n),b(n))
 
     do i=1,n
         do j=1,n
@@ -57,11 +58,31 @@ Program CN
     matriz(6,5) = 0
     matriz(6,6) = 0
 
+    b(1) = 1
+    b(2) = 2
+    b(3) = 3
+    b(4) = 4
+    b(5) = 5
+    b(6) = 6
+
     call printMatrix(matriz,n)
     call linea
+    do i=1,n
+        write(*,*) b(i)
+    end do
+    call linea
+
     call fCholesky(matriz,n)
+
     call linea
     call printMatrix(matriz,n)
+    call linea
+    call linearSystem(matriz,b,n)
+    call linea
+    do i=1,n
+        write(*,*) b(i)
+    end do
+    call linea
 
     ! para que no se cierre el programa derepente
     write(*,*) "Gracias por usar el programa..."
@@ -106,4 +127,31 @@ subroutine fCholesky(matriz, n)
         matriz(k+1,1) = matriz(k+1,1) - suma
     end do
 
+end subroutine
+
+subroutine linearSystem (A,b,n)
+    real*8,dimension(n,n),intent(inout):: A
+    real*8,dimension(n),intent(inout):: b
+    integer:: i,j
+    real*8:: suma = 0
+
+    do i=2,n
+        suma = 0
+        do j=1,i-1
+            suma = suma + A(j,i-j+1)*b(j)
+        end do
+        b(i) = b(i) - suma
+    end do
+
+    do i=1,n
+        b(i) = b(i) / A(i,1)
+    end do
+
+    do i=n-1,1,-1
+        suma = 0
+        do j=i+1,n
+            suma = suma + a(i,j-i+1)*b(j)
+        end do
+        b(i) = b(i) - suma
+    end do
 end subroutine
