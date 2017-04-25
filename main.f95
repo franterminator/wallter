@@ -1,86 +1,38 @@
 Program CN
     real*8, dimension(:,:),allocatable:: matriz
-    real*8, dimension(:),allocatable:: b
-    integer:: i
+    real*8, dimension(:),allocatable:: f
+    integer:: i,n,m
+    real*8:: A, B, C
 
     ! numero de puntos
-    write(*,*) "Introduzca el número de puntos:"
-    write(*,'(5x,a)') "n"
-    n = 6
-    allocate(matriz(n,n),b(n))
+    call bienvenido()
+    call datos(A,B,C,n,m)
+    allocate(matriz(n*m,n*m),f(n*m))
+    call constructMatrix(matriz,A,B,C,n,m)
 
-    do i=1,n
-        do j=1,n
-            matriz(i,j) = 0
-        end do
-    end do
+    f(1) = 1
+    f(2) = 2
+    f(3) = 3
+    f(4) = 4
+    f(5) = 5
+    f(6) = 6
 
-    ! matriz de prueba
-    matriz(1,1) = 7
-    matriz(1,2) = 2
-    matriz(1,3) = 0
-    matriz(1,4) = 3
-    matriz(1,5) = 0
-    matriz(1,6) = 0
-
-    matriz(2,1) = 7
-    matriz(2,2) = 2
-    matriz(2,3) = 0
-    matriz(2,4) = 3
-    matriz(2,5) = 0
-    matriz(2,6) = 0
-
-    matriz(3,1) = 7
-    matriz(3,2) = 2
-    matriz(3,3) = 0
-    matriz(3,4) = 3
-    matriz(3,5) = 0
-    matriz(3,6) = 0
-
-    matriz(4,1) = 7
-    matriz(4,2) = 2
-    matriz(4,3) = 0
-    matriz(4,4) = 3
-    matriz(4,5) = 0
-    matriz(4,6) = 0
-
-    matriz(5,1) = 7
-    matriz(5,2) = 2
-    matriz(5,3) = 0
-    matriz(5,4) = 3
-    matriz(5,5) = 0
-    matriz(5,6) = 0
-
-    matriz(6,1) = 7
-    matriz(6,2) = 2
-    matriz(6,3) = 0
-    matriz(6,4) = 3
-    matriz(6,5) = 0
-    matriz(6,6) = 0
-
-    b(1) = 1
-    b(2) = 2
-    b(3) = 3
-    b(4) = 4
-    b(5) = 5
-    b(6) = 6
-
-    call printMatrix(matriz,n)
+    call printMatrix(matriz,n,m)
     call linea
-    do i=1,n
-        write(*,*) b(i)
+    do i=1,n*m
+        write(*,*) f(i)
     end do
     call linea
 
     call fCholesky(matriz,n)
 
     call linea
-    call printMatrix(matriz,n)
+    call printMatrix(matriz,n,m)
     call linea
-    call linearSystem(matriz,b,n)
+    call linearSystem(matriz,f,n,m)
     call linea
-    do i=1,n
-        write(*,*) b(i)
+    do i=1,n*m
+        write(*,*) f(i)
     end do
     call linea
 
@@ -89,26 +41,107 @@ Program CN
     read(*,*)
 End Program CN
 
-subroutine printMatrix(matriz,n)
-    real*8,dimension(n,n),intent(in):: matriz
-    integer:: i,j
-
-    do i=1,n
-        write(*,'(*(f0.4,5x))') (matriz(i,j),j=1,n)
-    end do
-end subroutine
-
 subroutine linea()
     write(*,*) "--------------------------------------------------"
 end subroutine
 
-subroutine fCholesky(matriz, n)
-    real*8,dimension(n,n),intent(inout):: matriz
-    integer:: k,i,j,n,m
+subroutine printMatrix(matriz,n,m)
+    real*8,dimension(n*m,n*m),intent(in):: matriz
+    integer:: i,j
+
+    do i=1,n*m
+        write(*,'(*(f0.4,5x))') (matriz(i,j),j=1,n*m)
+    end do
+end subroutine
+
+subroutine bienvenido()
+    character(len=300):: line
+    integer:: iostat = 1
+
+    ! abrir archivo de bienvenida e imprimir mensaje
+    write(*,*) ".______    __          ___      .__   __.  __  ___      _______. __    __   _______  __       __      "
+    write(*,*) "|   _  \  |  |        /   \     |  \ |  | |  |/  /     /       ||  |  |  | |   ____||  |     |  |     "
+    write(*,*) "|  |_)  | |  |       /  ^  \    |   \|  | |  '  /     |   (----`|  |__|  | |  |__   |  |     |  |     "
+    write(*,*) "|   ___/  |  |      /  /_\  \   |  . `  | |    <       \   \    |   __   | |   __|  |  |     |  |     "
+    write(*,*) "|  |      |  `----./  _____  \  |  |\   | |  .  \  .----)   |   |  |  |  | |  |____ |  `----.|  `----."
+    write(*,*) "| _|      |_______/__/     \__\ |__| \__| |__|\__\ |_______/    |__|  |__| |_______||_______||_______|"
+
+end subroutine
+
+subroutine datos(A,B,C,n,m)
+    real*8,intent(out):: A,B,C
+    integer*4,intent(out):: n,m
+    real*8:: largo, ancho, deltaX, deltaY
+
+    write(*,*) "Bienvenido -------> "
+    write(*,'(20X,A)') "Pulse enter para continuar"
+    read(*,*)
+
+    ! Datos tecnicos de la placa
+    write(*,*) "*************************"
+    write(*,*) "*   DATOS DE LA PLACA   *"
+    write(*,*) "*************************"
+    write(*,*) "-> ancho de la placa"
+    write(*,'(A,$)') "(metros) "
+    read(*,*) ancho
+    write(*,*) "-> puntos para discretizar el largo"
+    write(*,'(A,$)') "(metros) "
+    read(*,*) largo
+
+    ! datos para la discretizacion del modelo
+    write(*,*) "*************************"
+    write(*,*) "*   NUMERO DE PUNTOS    *"
+    write(*,*) "*************************"
+    write(*,*) "-> puntos para discretizar el ancho"
+    write(*,'(A,$)') "(integer) "
+    read(*,*) n
+    write(*,*) "-> puntos para discretizar el largo"
+    write(*,'(A,$)') "(integer) "
+    read(*,*) m
+
+    ! calculo de los coef A, B y C
+    deltaX = ancho / (n + 1)
+    deltaY = largo / (m + 1)
+    B = 1 / (deltaX**2)
+    C = 1 / (deltaY**2)
+    A = -2 * (B + C)
+    write(*,'(A,3(f0.2,X),A)') "[A,B,C] -> [ ",A,B,C,"]"
+
+    ! cambiamos n para adecuar la nueva dimension de la matriz
+end subroutine
+
+subroutine constructMatrix(matriz,A,B,C,n,m)
+    real*8,dimension(n*m,n*m),intent(inout):: matriz
+    real*8,intent(in):: A,B,C
+    integer,intent(in):: n,m
+    integer:: i,j
+
+    do i=1,n*m
+        do j=1,n*m
+            matriz(i,j) = 0
+        end do
+    end do
+
+
+    do i=1,n*m
+        matriz(i,1) = A
+        if (mod(i,n) == 0 .AND. i > 1) then
+            matriz(i,2) = 0
+        else
+            matriz(i,2) = B
+        end if
+        if(i+n < n*m) matriz(i,n+1) = C
+    end do
+end subroutine
+
+subroutine fCholesky(matriz, n, m)
+    real*8,dimension(n*m,n*m),intent(inout):: matriz
+    integer,intent(in):: n, m
+    integer:: k,i,j
     real*8:: suma
 
     ! factorizacion de cholesky
-    do k=1,n-1
+    do k=1,n*m-1
         do i=1,k
             suma = 0
             do j=1,i-1
@@ -129,29 +162,30 @@ subroutine fCholesky(matriz, n)
 
 end subroutine
 
-subroutine linearSystem (A,b,n)
-    real*8,dimension(n,n),intent(inout):: A
-    real*8,dimension(n),intent(inout):: b
+subroutine linearSystem (matriz, f, n, m)
+    real*8,dimension(n*m,n*m),intent(inout):: matriz
+    real*8,dimension(n*m),intent(inout):: f
+    integer,intent(in):: n, m
     integer:: i,j
     real*8:: suma = 0
 
-    do i=2,n
+    do i=2,n*m
         suma = 0
         do j=1,i-1
-            suma = suma + A(j,i-j+1)*b(j)
+            suma = suma + matriz(j,i-j+1)*f(j)
         end do
-        b(i) = b(i) - suma
+        f(i) = f(i) - suma
     end do
 
-    do i=1,n
-        b(i) = b(i) / A(i,1)
+    do i=1,n*m
+        f(i) = f(i) / matriz(i,1)
     end do
 
-    do i=n-1,1,-1
+    do i=n*m-1,1,-1
         suma = 0
         do j=i+1,n
-            suma = suma + a(i,j-i+1)*b(j)
+            suma = suma + matriz(i,j-i+1)*f(j)
         end do
-        b(i) = b(i) - suma
+        f(i) = f(i) - suma
     end do
 end subroutine
