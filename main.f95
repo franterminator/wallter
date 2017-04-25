@@ -24,7 +24,7 @@ Program CN
     end do
     call linea
 
-    call fCholesky(matriz,n)
+    call fCholesky(matriz,n,m)
 
     call linea
     call printMatrix(matriz,n,m)
@@ -130,13 +130,12 @@ subroutine constructMatrix(matriz,A,B,C,n,m)
         else
             matriz(i,2) = B
         end if
-        if(i+n < n*m) matriz(i,n+1) = C
+        if(i+n <= n*m) matriz(i,n+1) = C
     end do
 end subroutine
 
 subroutine fCholesky(matriz, n, m)
     real*8,dimension(n*m,n*m),intent(inout):: matriz
-    integer,intent(in):: n, m
     integer:: k,i,j
     real*8:: suma
 
@@ -159,7 +158,6 @@ subroutine fCholesky(matriz, n, m)
         end do
         matriz(k+1,1) = matriz(k+1,1) - suma
     end do
-
 end subroutine
 
 subroutine linearSystem (matriz, f, n, m)
@@ -183,7 +181,7 @@ subroutine linearSystem (matriz, f, n, m)
 
     do i=n*m-1,1,-1
         suma = 0
-        do j=i+1,n
+        do j=i+1,n*m
             suma = suma + matriz(i,j-i+1)*f(j)
         end do
         f(i) = f(i) - suma
