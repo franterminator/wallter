@@ -1,35 +1,39 @@
 Program CN
     real*8, dimension(:,:),allocatable:: matriz
     real*8, dimension(:),allocatable:: f
-    integer:: i,n,m
-    real*8:: A, B, C
+    integer:: i, n, m
+    real*8:: ancho, largo, espesor
 
     ! numero de puntos
     call bienvenido()
-    call datos(A,B,C,n,m)
+    call datosPlaca(ancho,largo,espesor,n,m)
     allocate(matriz(n*m,n*m),f(n*m))
-    call constructMatrix(matriz,A,B,C,n,m)
+    call constructor(ancho,largo,espesor,matriz,f,n,m)
 
-    f(1) = 1
-    f(2) = 2
-    f(3) = 3
-    f(4) = 4
-    f(5) = 5
-    f(6) = 6
-
+    ! muestra la matriz
+    call linea
+    write(*,'(25X,A)') "Matriz"
+    call linea
     call printMatrix(matriz,n,m)
+    call linea
+    write(*,'(25X,A)') "Vector"
     call linea
     do i=1,n*m
         write(*,*) f(i)
     end do
     call linea
 
+    ! factorizacion y resultados
     call fCholesky(matriz,n,m)
-
+    call linea
+    write(*,'(20X,A)') "Matriz (factorizada)"
     call linea
     call printMatrix(matriz,n,m)
-    call linea
+
+    ! resolucion del sistema
     call linearSystem(matriz,f,n,m)
+    call linea
+    write(*,'(20X,A)') "Vector solucion"
     call linea
     do i=1,n*m
         write(*,*) f(i)
@@ -42,7 +46,7 @@ Program CN
 End Program CN
 
 subroutine linea()
-    write(*,*) "--------------------------------------------------"
+    write(*,*) "___________________________________________________________"
 end subroutine
 
 subroutine printMatrix(matriz,n,m)
@@ -66,16 +70,14 @@ subroutine bienvenido()
     write(*,*) "|  |      |  `----./  _____  \  |  |\   | |  .  \  .----)   |   |  |  |  | |  |____ |  `----.|  `----."
     write(*,*) "| _|      |_______/__/     \__\ |__| \__| |__|\__\ |_______/    |__|  |__| |_______||_______||_______|"
 
-end subroutine
-
-subroutine datos(A,B,C,n,m)
-    real*8,intent(out):: A,B,C
-    integer*4,intent(out):: n,m
-    real*8:: largo, ancho, deltaX, deltaY
-
     write(*,*) "Bienvenido -------> "
     write(*,'(20X,A)') "Pulse enter para continuar"
     read(*,*)
+end subroutine
+
+subroutine datosPlaca(ancho,largo,espesor,n,m)
+    integer*4,intent(out):: n,m
+    real*8,intent(out):: largo, ancho, espesor
 
     ! Datos tecnicos de la placa
     write(*,*) "*************************"
@@ -84,9 +86,12 @@ subroutine datos(A,B,C,n,m)
     write(*,*) "-> ancho de la placa"
     write(*,'(A,$)') "(metros) "
     read(*,*) ancho
-    write(*,*) "-> puntos para discretizar el largo"
+    write(*,*) "-> largo de la placa"
     write(*,'(A,$)') "(metros) "
     read(*,*) largo
+    write(*,*) "-> espesor de la placa"
+    write(*,'(A,$)') "(metros) "
+    read(*,*) espesor
 
     ! datos para la discretizacion del modelo
     write(*,*) "*************************"
@@ -98,6 +103,36 @@ subroutine datos(A,B,C,n,m)
     write(*,*) "-> puntos para discretizar el largo"
     write(*,'(A,$)') "(integer) "
     read(*,*) m
+end subroutine
+
+subroutine datosMaterial(espesor,coefMat)
+    real*8,intent(in):: espesor
+    real*8,intent(out):: coefMat
+    real*8:: Young,poisson
+
+    write(*,*) "*************************"
+    write(*,*) "*   DATOS DEL MATERIAL  *"
+    write(*,*) "*************************"
+    write(*,*) "-> Modulo de Young"
+    write(*,'(A,$)') "(MPa) "
+    read(*,*) Young
+    write(*,*) "-> Coef. de poisson"
+    write(*,'(A,$)') "(_real_) "
+    read(*,*) poisson
+
+
+    coefMat = Young*espesor**3
+    coefMat = coefMat/(12*(1-poisson**2))
+end subroutine
+
+subroutine constructor(ancho,largo,espesor,matriz,f,n,m)
+    real*8,dimension(n*m,n*m),intent(inout):: matriz
+    real*8,dimension(n*m),intent(inout):: f
+    real*8,intent(in):: ancho,largo,espesor
+    integer,intent(in):: n,m
+
+    real*8:: A,B,C,deltaX,deltaY,coefMat,presion
+    integer:: i,j
 
     ! calculo de los coef A, B y C
     deltaX = ancho / (n + 1)
@@ -107,22 +142,15 @@ subroutine datos(A,B,C,n,m)
     A = -2 * (B + C)
     write(*,'(A,3(f0.2,X),A)') "[A,B,C] -> [ ",A,B,C,"]"
 
-    ! cambiamos n para adecuar la nueva dimension de la matriz
-end subroutine
-
-subroutine constructMatrix(matriz,A,B,C,n,m)
-    real*8,dimension(n*m,n*m),intent(inout):: matriz
-    real*8,intent(in):: A,B,C
-    integer,intent(in):: n,m
-    integer:: i,j
-
+    !matriz y vector a cero
     do i=1,n*m
+        f(i) = 0
         do j=1,n*m
             matriz(i,j) = 0
         end do
     end do
 
-
+    ! construccion matriz
     do i=1,n*m
         matriz(i,1) = A
         if (mod(i,n) == 0 .AND. i > 1) then
@@ -131,6 +159,18 @@ subroutine constructMatrix(matriz,A,B,C,n,m)
             matriz(i,2) = B
         end if
         if(i+n <= n*m) matriz(i,n+1) = C
+    end do
+
+    ! construccion vector
+    call datosMaterial(espesor,coefMat)
+    do i=1,n*m
+        ! peso especifico agua = 10000 N / m2 -> 0.01 N / mm2 -> 0.01 MPa
+        presion = 0.01*(largo/2-i/m*deltaY)/coefMat
+        if (presion < 0) then
+            f(i) = 0
+        else
+            f(i) = presion
+        end if
     end do
 end subroutine
 
