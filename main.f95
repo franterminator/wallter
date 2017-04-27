@@ -32,6 +32,7 @@ Program CN
 
     ! resolucion del sistema
     call linearSystem(matriz,f,n,m)
+    call linearSystem(matriz,f,n,m)
     call linea
     write(*,'(20X,A)') "Vector solucion"
     call linea
@@ -165,7 +166,7 @@ subroutine constructor(ancho,largo,espesor,matriz,f,n,m)
     call datosMaterial(espesor,coefMat)
     do i=1,n*m
         ! peso especifico agua = 10000 N / m2 -> 0.01 N / mm2 -> 0.01 MPa
-        presion = 0.01*(largo/2-i/m*deltaY)/coefMat
+        presion = 0.01*(largo/2-(i+1)/m*deltaY)/coefMat
         if (presion < 0) then
             f(i) = 0
         else
