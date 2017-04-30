@@ -15,67 +15,101 @@ Program CN
 
     real*8, dimension(:,:),allocatable:: matriz !! sistema de ecuaciones
     real*8, dimension(:),allocatable:: f        !! vector terminos independientes
-    integer:: i, n, m                           !! numero de puntos para discretizar largo(n) y ancho(m)
+    integer:: n, m                              !! numero de puntos para discretizar largo(n) y ancho(m)
     real*8:: ancho, largo, espesor              !! dimensiones de la placa
+    logical:: asserts = .FALSE.
 
     ! numero de puntos
+    call commandLine(asserts)
     call bienvenido()
     call constructor(matriz,f,n,m)
 
     ! muestra la matriz
-    call linea
-    write(*,'(25X,A)') "Matriz"
-    call linea
-    call printMatrix(matriz,n,m)
-    call linea
-    write(*,'(25X,A)') "Vector"
-    call linea
-    do i=1,n*m
-        write(*,*) f(i)
-    end do
-    call linea
+    if (asserts) then
+        call printMatrix(matriz, 'Matriz')
+        call printVector(f, 'Vector')
 
-    ! factorizacion y resultados
+        ! factorizacion y resultados
+        call fCholesky(matriz,n,m)
+        call printMatrix(matriz ,'Matriz (factorizada)')
+
+        ! resolucion del sistema
+        call linearSystem(matriz,f,n,m)
+        call linearSystem(matriz,f,n,m)
+        call printVector(f, 'Vector solucion')
+    end if
+
     call fCholesky(matriz,n,m)
-    call linea
-    write(*,'(20X,A)') "Matriz (factorizada)"
-    call linea
-    call printMatrix(matriz,n,m)
-
-    ! resolucion del sistema
     call linearSystem(matriz,f,n,m)
     call linearSystem(matriz,f,n,m)
-    call linea
-    write(*,'(20X,A)') "Vector solucion"
-    call linea
-    do i=1,n*m
-        write(*,*) f(i)
-    end do
-    call linea
-
-    call linearSystem(matriz,b,n)
-
-    call linea
-    do i=1,n
-        write(*,*) b(i)
-    end do
+    call printVector(f, 'Vector solucion')
 
     ! para que no se cierre el programa derepente
     write(*,*) "Gracias por usar el programa..."
     read(*,*)
+
+    contains
+    subroutine header(label)
+        character(len=*),intent(in):: label
+        character(len=30):: formato
+        character(len=2):: iString
+        integer:: i
+
+        ! 30 is the line length / 2
+        i = 30 - len(label)/2
+        write(iString,'(i2)') i
+        formato = '('//iString//'X,A)'
+        call linea()
+        write(*,formato) label
+        call linea()
+    end subroutine
+
+    subroutine printMatrix(matriz,label)
+        real*8,dimension(:,:),intent(in):: matriz
+        character(len=*),intent(in):: label
+        integer:: i,j
+
+        call header(label)
+        do i=1,ubound(matriz,1)
+            write(*,'(*(f0.4,5x))') (matriz(i,j),j=1,ubound(matriz,2))
+        end do
+        call linea()
+    end subroutine
+
+    subroutine printVector(f,label)
+        real*8,dimension(:),intent(in):: f
+        character(len=*),intent(in):: label
+        integer:: i
+
+        call header(label)
+        do i=1,ubound(f,1)
+            write(*,*) f(i)
+        end do
+        call linea()
+    end subroutine
 End Program CN
 
 subroutine linea()
-    write(*,*) "___________________________________________________________"
+    write(*,*) "____________________________________________________________"
 end subroutine
 
-subroutine printMatrix(matriz,n,m)
-    real*8,dimension(n*m,n*m),intent(in):: matriz
-    integer:: i,j
+subroutine commandLine(asserts)
+    logical,intent(out):: asserts
+    integer:: i
+    character(len=30):: cmd
 
-    do i=1,n*m
-        write(*,'(*(f0.4,5x))') (matriz(i,j),j=1,n*m)
-    end do
+    i = iargc()
+    if(i>0) then
+        call getarg(i,cmd)
+        if(cmd == '-h') then
+            write(*,*) 'You wanna help, bitch'
+            call exit(0)
+        end if
+        if(cmd == '-a') then
+            write(*,*) 'Oh,fuck you active the asserts'
+            asserts = .TRUE.
+        end if
+    end if
 end subroutine
 
 subroutine bienvenido()
@@ -241,32 +275,5 @@ subroutine linearSystem (matriz, f, n, m)
             suma = suma + matriz(i,j-i+1)*f(j)
         end do
         f(i) = f(i) - suma
-    end do
-end subroutine
-
-subroutine linearSystem (A,b,n)
-    real*8,dimension(n,n),intent(inout):: A
-    real*8,dimension(n),intent(inout):: b
-    integer:: i,j
-    real*8:: suma = 0
-
-    do i=2,n
-        suma = 0
-        do j=1,i-1
-            suma = suma + A(i,j)*b(j)
-        end do
-        b(i) = b(i) - suma
-    end do
-
-    do i=1,n
-        b(i) = b(i) / A(i,i)
-    end do
-
-    do i=n-1,1,-1
-        suma = 0
-        do j=i+1,n
-            suma = suma + a(j,i)*b(j)
-        end do
-        b(i) = b(i) - suma
     end do
 end subroutine
