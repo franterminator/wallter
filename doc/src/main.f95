@@ -1,6 +1,6 @@
 !< author: francisco rivera alvarez
 !  Programa para el calculo de flechas de una placa apoyada
-!  en sus cantos con carga hidrï¿½ulica hasta la mitad de su largo
+!  en sus cantos con carga hidráulica hasta la mitad de su largo
 Program CN
 
     !< Interface para poder fijar las dimensiones de la matriz en la
@@ -52,13 +52,6 @@ Program CN
         write(*,*) f(i)
     end do
     call linea
-
-    call linearSystem(matriz,b,n)
-
-    call linea
-    do i=1,n
-        write(*,*) b(i)
-    end do
 
     ! para que no se cierre el programa derepente
     write(*,*) "Gracias por usar el programa..."
@@ -241,32 +234,5 @@ subroutine linearSystem (matriz, f, n, m)
             suma = suma + matriz(i,j-i+1)*f(j)
         end do
         f(i) = f(i) - suma
-    end do
-end subroutine
-
-subroutine linearSystem (A,b,n)
-    real*8,dimension(n,n),intent(inout):: A
-    real*8,dimension(n),intent(inout):: b
-    integer:: i,j
-    real*8:: suma = 0
-
-    do i=2,n
-        suma = 0
-        do j=1,i-1
-            suma = suma + A(i,j)*b(j)
-        end do
-        b(i) = b(i) - suma
-    end do
-
-    do i=1,n
-        b(i) = b(i) / A(i,i)
-    end do
-
-    do i=n-1,1,-1
-        suma = 0
-        do j=i+1,n
-            suma = suma + a(j,i)*b(j)
-        end do
-        b(i) = b(i) - suma
     end do
 end subroutine
