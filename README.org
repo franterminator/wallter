@@ -1,1 +1,73 @@
-* SHELL90
+* WALLTER
+Este programa calcula las flechas de una placa apoyada por sus contornos
+sometidas a una carga hidráulica hasta la mitad de su largo.
+
+** Opciones de ejecución
+El programa se puede ejecutar de varias maneras, permitiendo de esta manera
+que el usuario puede escoger entre un modo de ejecuccion sencillo o mas 
+avanzado y con mas resultados.
+
+*** Help
+Para ver esas opciones en la consola. Escriba el nombre del programa mas 
+la opcion "-h".
+
+Ej: water.exe -h
+
+*** Asserts
+Con esta opcion se imprimiran detalles de la solución del sistema y de la
+factorización de la matriz.
+
+Se recomienda usar esta opción solo si se necesitan ver los datos de
+factorización y del sistema. Ya que por defecto el programa impirmira 
+en pantalla las flechas, sin necesidad de activar esta opción.
+
+Ej: wallter.exe -a
+
+*** Config file
+Se le indica al programa un archivo desde el que leerá los datos necesarios
+para la ejecución. Es un modo mas complejo de ejecucción ya que el archivo
+de configuración es rudimental y tiene un formato muy estricto.
+
+Sin embargo, esta es la opción mas rapida y comodo de meter los datos.
+
+Ej: walter.exe -c ./config/config.txt
+**** Archivo de configuración
+Junto al programa se encuentra la carpeta config. En ella hay varios 
+archivos de configuración. Se recomienda hacer una copia de cualquiera
+de estos y modificarlo para que se adapta a los valores deseados.
+
+La estructura de estos archivos es simple pero estricta. Suele empezar
+la línea con una etiqueta que indica la variable acompañado de su valor
+y las unidades.
+
+Aunque se cambie la etiqueta de la variable o las unidades en el archivo
+de configuración el programa no lo tendrá en cuenta. Los textos que 
+hay en el archivo de texto de configuración son simples anotaciones
+que facilitan su manejo y edición.
+
+El programa no tiene ningún tipo de tokenizer o parse, simplemente tiene
+estipulado un orden de lectura y asigna esos valores en ese orden a las
+variables. Por lo que no se deberían cambiar el orden de los textos
+si se editan estos archivos a mano.
+
+*** Combinación de varios argumentos
+Se pueden combinar la opción asserts y archivo de configuración sin 
+problema.
+
+Ej: wallter.exe -a -c ./config/config.txt
+
+** Resultados
+El programa imprime los resultados indicados en las opciones de ejecucción
+en la pantalla. Si se activa la opción asserts al ejecutarlo aparte de 
+devolver las flechas, imprimirá los resultados de la factorización y 
+solución del sistema.
+
+Además, el programa escribirá un archivo web en la carpeta result. Se 
+aconseja usar un navegador actualizado para abrir el archivo. Este archivo
+muestras las flechas y los datos introducidos al programa de forma mas 
+clara.
+
+** Documentación
+Junto al programa hay un carpeta llamada doc, donde se puede encontrar la 
+documentación técnica del programa.
+

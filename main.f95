@@ -1,7 +1,7 @@
 !< author: francisco rivera alvarez
 !  Programa para el calculo de flechas de una placa apoyada
 !  en sus cantos con carga hidraulica hasta la mitad de su largo
-Program CN
+Program WALLTER
 
     !< Interface para poder fijar las dimensiones de la matriz en la
     ! subroutine constructor
@@ -119,7 +119,7 @@ Program CN
         end do
         call linea()
     end subroutine
-End Program CN
+End Program WALLTER
 
 !< Imprime una línea de 60 caracteres.
 !  Se usa para separar la informacion que se imprime en la pantalla
@@ -144,6 +144,7 @@ subroutine commandLine(asserts,config)
                 write(*,*) 'Las opciones disponibles son:'
                 write(*,*) '-h para ver esta ayuda'
                 write(*,*) '-a para activar la impresion de los datos de factorizacion'
+                write(*,*) '-c [FILENAME] para usar un programa de configuracion con los datos'
                 call exit(0)
             end if
             if(cmd == '-a') then
@@ -164,12 +165,23 @@ end subroutine
 
 !< Imprime un mensaje de bienvenida
 subroutine bienvenido()
-    write(*,*) ".______    __          ___      .__   __.  __  ___      _______. __    __   _______  __       __      "
-    write(*,*) "|   _  \  |  |        /   \     |  \ |  | |  |/  /     /       ||  |  |  | |   ____||  |     |  |     "
-    write(*,*) "|  |_)  | |  |       /  ^  \    |   \|  | |  '  /     |   (----`|  |__|  | |  |__   |  |     |  |     "
-    write(*,*) "|   ___/  |  |      /  /_\  \   |  . `  | |    <       \   \    |   __   | |   __|  |  |     |  |     "
-    write(*,*) "|  |      |  `----./  _____  \  |  |\   | |  .  \  .----)   |   |  |  |  | |  |____ |  `----.|  `----."
-    write(*,*) "| _|      |_______/__/     \__\ |__| \__| |__|\__\ |_______/    |__|  |__| |_______||_______||_______|"
+
+    write(*,*) "                                  ,--,      ,--,           ,----,                     "
+    write(*,*) "                               ,---.'|   ,---.'|         ,/   .`|                     "
+    write(*,*) "           .---.   ,---,       |   | :   |   | :       ,`   .'  :   ,---,.,-.----.    "
+    write(*,*) "          /. ./|  '  .' \      :   : |   :   : |     ;    ;     / ,'  .' |\    /  \   "
+    write(*,*) "      .--'.  ' ; /  ;    '.    |   ' :   |   ' :   .'___,/    ,',---.'   |;   :    \  "
+    write(*,*) "     /__./ \ : |:  :       \   ;   ; '   ;   ; '   |    :     | |   |   .'|   | .\ :  "
+    write(*,*) " .--'.  '   \' .:  |   /\   \  '   | |__ '   | |__ ;    |.';  ; :   :  |-,.   : |: |  "
+    write(*,*) "/___/ \ |    ' '|  :  ' ;.   : |   | :.'||   | :.'|`----'  |  | :   |  ;/||   |  \ :  "
+    write(*,*) ";   \  \;      :|  |  ;/  \   \'   :    ;'   :    ;    '   :  ; |   :   .'|   : .  /  "
+    write(*,*) " \   ;  `      |'  :  | \  \ ,'|   |  ./ |   |  ./     |   |  ' |   |  |-,;   | |  \  "
+    write(*,*) "  .   \    .\  ;|  |  '  '--'  ;   : ;   ;   : ;       '   :  | '   :  ;/||   | ;\  \ "
+    write(*,*) "   \   \   ' \ ||  :  :        |   ,/    |   ,/        ;   |.'  |   |    \:   ' | \.' "
+    write(*,*) "    :   '  |--' |  | ,'        '---'     '---'         '---'    |   :   .':   : :-'   "
+    write(*,*) "     \   \ ;    `--''                                           |   | ,'  |   |.'     "
+    write(*,*) "      '---'                                                     `----'    `---'       "
+
 
     write(*,*) "Bienvenido -------> "
     write(*,'(20X,A)') "Pulse enter para continuar"
