@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>resultados</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<meta name="robots" content="index,follow" />
+		<link rel="stylesheet" type="text/css" href="./css/style.css" />
+		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/clipboard.js/1.6.0/clipboard.min.js"></script>	
+</head>
+ <body>
+	<div class="row">
+		<div class="header">
+			<h1> Resultados del programa </h1>
+			<button id="bNumerico">Resultados Numericos</button>
+			<button id="bAnalitico">Resultados Analiticos</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="box-item">
+			<header> Material </header>
+			<p> El material empleado es : 	</p>
+			<table>
+				<tr><td>E =    210000.00000000000      MPa</td></tr>
+				<tr><td>v =   0.29999999999999999      </td></tr>
+			</table>
+			<header> Placa </header>
+			<p>Las medidas de la placa son:</p>
+			<table>
+				<tr><td>Largo =    20.000000000000000       m</td></tr>
+				<tr><td>Ancho =    20.000000000000000       m</td></tr>
+				<tr><td>Espesor =    1.0000000000000000E-002  m</td></tr>
+			</table>
+		</div>
+		<div class="box-item" id="resultados">
+			<header id="azul"> Resultados </header>
+			<table id="tNumerico">
+				<tr class="tr-h">
+					<td rowspan="5"> Y </td>
+				</tr>
+				<tr>
+					<td class="td-h">6</td>
+					<td>387.0775</td><td>521.8033</td><td>387.0775</td>
+				</tr>
+				<tr>
+					<td class="td-h">4</td>
+					<td>330.0781</td><td>457.0312</td><td>330.0781</td>
+				</tr>
+				<tr>
+					<td class="td-h">2</td>
+					<td>171.5163</td><td>239.9155</td><td>171.5163</td>
+				</tr>
+				<tr class="tr-h">
+					<td>\</td><td>2</td><td>4</td><td>6</td>
+				</tr>
+				<tr class='tr-h'>
+					<td>0</td><td colspan="4">X</td>
+				</tr>
+			</table>
+			<table id="tAnalitico">
+				<tr class="tr-h">
+					<td rowspan="5"> Y </td>
+				</tr>
+				<tr>
+					<td class="td-h">12</td>
+					<td>400</td><td>500</td><td>387.0775</td>
+				</tr>
+				<tr>
+					<td class="td-h">8</td>
+					<td>330.0781</td><td>457.0312</td><td>330.0781</td>
+				</tr>
+				<tr>
+					<td class="td-h">4</td>
+					<td>171.5163</td><td>239.9155</td><td>171.5163</td>
+				</tr>
+				<tr class="tr-h">
+					<td>\</td><td>4</td><td>8</td><td>12</td>
+				</tr>
+				<tr class='tr-h'>
+					<td>0</td><td colspan="4">X</td>
+				</tr>
+			</table>
+			<button id="copyButton" data-clipboard-action="copy" data-clipboard-target=".active">Copia la tabla</button>
+		</div>
+	</div>
+	<script src="js/buttons.js"></script>
+</body>
+</html>

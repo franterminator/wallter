@@ -58,7 +58,7 @@ Program WALLTER
         fMatriz = reshape(f,forma,order=orden)
         call printMatrix(fMatriz, 'Vector solucion')
 
-        call exportResultados(fMatriz,n,m)
+        call resNumericos(fMatriz,n,m)
 
     ! muestra solo la solucion
     else
@@ -74,7 +74,7 @@ Program WALLTER
         fMatriz = reshape(f,forma,order=orden)
         call printMatrix(fMatriz, 'Vector solucion')
 
-        call exportResultados(fMatriz,n,m)
+        call resNumericos(fMatriz,n,m)
 
     end if
     ! para que no se cierre el programa derepente
@@ -312,6 +312,7 @@ subroutine constructor(matriz,f,navier,n,m)
 
     allocate(navier(n,m))
     call analiticaNavier(navier,ancho,largo,rigidez,n,m)
+    call resAnaliticos(navier,n,m)
 
     ! calculo de los coef A, B y C
     deltaX = ancho / (n + 1)
@@ -415,6 +416,7 @@ subroutine linearSystem (matriz, f, n, m)
     end do
 end subroutine
 
+!< Resolucion del sistema mediante el metodo de Navier
 subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
     real*8,intent(in):: ancho,largo
     real*8,intent(in):: rigidez
@@ -471,89 +473,3 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
 
 end subroutine
 
-subroutine createHTML(name)
-    character(len=*),intent(in):: name
-
-    character(len=50):: resultsFile,configFile
-    COMMON resultsFile,configFile
-
-
-    open(unit=12,file=resultsFile)
-    write(12,*) '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'
-    write(12,*) '<head>'
-	write(12,*) '<title>',name,'</title>'
-	write(12,*) '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'
-	write(12,*) '<meta name="description" content="" />'
-	write(12,*) '<meta name="keywords" content="" />'
-	write(12,*) '<meta name="robots" content="index,follow" />'
-	write(12,*) '<link rel="stylesheet" type="text/css" href="./css/style.css" />'
-    write(12,*) '</head>'
-    write(12,*) '<body>'
-    write(12,*) '<div class="row">'
-    write(12,*) '<div class="header">'
-    write(12,*) '<h1> Resultados del programa </h1>'
-    write(12,*) '</div>'
-	write(12,*) '</div>'
-	close(12)
-end subroutine
-
-subroutine exportMaterial(Young,poisson)
-    real*8,intent(in):: Young,poisson
-    character(len=50):: resultsFile,configFile
-    COMMON resultsFile,configFile
-
-    open(unit=12,file=resultsFile,status='old',position="append")
-    write(12,*) '<div class="row">'
-    write(12,*) '<div class="box-item">'
-    write(12,*) '<header> Material </header>'
-    write(12,*) '<p> El material empleado es : 	</p>'
-    write(12,*) '<table>'
-    write(12,*) '<tr><td>E = ',Young,'MPa</td></tr>'
-    write(12,*) '<tr><td>v = ',poisson,'</td></tr>'
-    write(12,*) '</table>'
-    close(12)
-end subroutine
-
-subroutine exportPlaca(largo,ancho,espesor)
-    real*8,intent(in):: largo,ancho,espesor
-    character(len=50):: resultsFile,configFile
-    COMMON resultsFile,configFile
-
-    open(unit=12,file=resultsFile,status='old',position="append")
-    write(12,*) '<header> Placa </header>'
-    write(12,*) '<p>Las medidas de la placa son:</p>'
-    write(12,*) '<table>'
-    write(12,*) '<tr><td>Largo = ',largo,' m</td></tr>'
-    write(12,*) '<tr><td>Ancho = ',ancho,' m</td></tr>'
-    write(12,*) '<tr><td>Espesor = ',espesor,' m</td></tr>'
-    write(12,*) '</table>'
-    write(12,*) '</div>'
-    close(12)
-end subroutine
-
-subroutine exportResultados(fMatriz,n,m)
-    real*8,dimension(n,m),intent(in):: fMatriz
-    integer,intent(in):: n,m
-    character(len=50):: resultsFile,configFile
-    COMMON resultsFile,configFile
-
-    open(unit=12,file=resultsFile,status='old',position="append")
-    write(12,*) '<div class="box-item" id="resultados">'
-    write(12,*) '<header id="azul"> Resultados </header>'
-    write(12,*) '<table>'
-
-    write(12,*) '<th rowspan="',m+2,'"> Y </th>'
-    write(12,*) '<th colspan="',n,'"> X </th>'
-    write(12,*) '<tr class="tr-header">'
-    write(12,*) ('<td>',2*j,'</td>',j=1,m)
-    write(12,*) '</tr>'
-
-    do i=1,n
-        write(12,*) '<tr>'
-        write(12,'(*(A,f0.4,5x,A))') ('<td>',fMatriz(i,j),'</td>',j=1,m)
-        write(12,*) '</tr>'
-    end do
-
-    write(12,*)'</table>'
-    close(12)
-end subroutine

@@ -1,31 +1,42 @@
 !< author: francisco rivera alvarez
 !  Programa para el calculo de flechas de una placa apoyada
 !  en sus cantos con carga hidraulica hasta la mitad de su largo
-Program CN
+Program WALLTER
 
     !< Interface para poder fijar las dimensiones de la matriz en la
     ! subroutine constructor
     interface
-        subroutine constructor(matriz,f,n,m)
+        subroutine constructor(matriz,f,navier,n,m)
             real*8,dimension(:,:),allocatable,intent(inout):: matriz    !! sistema de ecuaciones
             real*8,dimension(:),allocatable,intent(inout):: f           !! vector terminos independientes
+            real*8,dimension(:,:),allocatable,intent(inout):: navier    !! resultados analiticos
             integer,intent(out):: n,m
         end subroutine
     end interface
 
     real*8, dimension(:,:),allocatable:: matriz !! sistema de ecuaciones
     real*8, dimension(:),allocatable:: f        !! vector terminos independientes
+    real*8,dimension(:,:),allocatable:: navier
     integer:: n, m                              !! numero de puntos para discretizar largo(n) y ancho(m)
 
     real*8, dimension(:,:),allocatable:: fMatriz!! solucion en forma matricial
     integer,dimension(2):: forma                !! forma de la matriz solucion
     integer,dimension(2):: orden = (/2,1/)      !! orden de los numeros al cambiar vector a matriz solucion
+
+    character(len=50):: resultsFile = './result/resultados.html'
+    character(len=50):: configFile = ''
     logical:: asserts = .FALSE.                 !! si se activa se imprimen los datos de la factorizacion
+    logical:: exists
+
+    COMMON resultsFile,configFile
+
+    inquire(file=resultsFile,exist=exists)
+    if(.NOT.exists) resultsFile = 'result.html'
 
     ! inicio del programa
     call commandLine(asserts)       ! opciones de ejecucion
     call bienvenido()               ! mensaje de bienvenida (header)
-    call constructor(matriz,f,n,m)  ! calculo de las matrices
+    call constructor(matriz,f,navier,n,m)  ! calculo de las matrices
 
     ! muestra la matriz y factorizacion
     if (asserts) then
@@ -47,6 +58,8 @@ Program CN
         fMatriz = reshape(f,forma,order=orden)
         call printMatrix(fMatriz, 'Vector solucion')
 
+        call exportResultados(fMatriz,n,m)
+
     ! muestra solo la solucion
     else
         ! factoriza y resuelve
@@ -60,6 +73,8 @@ Program CN
         forma(2) = m
         fMatriz = reshape(f,forma,order=orden)
         call printMatrix(fMatriz, 'Vector solucion')
+
+        call exportResultados(fMatriz,n,m)
 
     end if
     ! para que no se cierre el programa derepente
@@ -109,7 +124,7 @@ Program CN
         end do
         call linea()
     end subroutine
-End Program CN
+End Program WALLTER
 
 !< Imprime una línea de 60 caracteres.
 !  Se usa para separar la informacion que se imprime en la pantalla
@@ -122,33 +137,59 @@ end subroutine
 !  -a -> asserts: activa la impresion de los datos de la factorizacion.
 subroutine commandLine(asserts)
     logical,intent(out):: asserts   !! cuando es verdadera se activa la impresion de los datos de factorizacion
+
     integer:: i                     !! numero de argumentos
     character(len=30):: cmd         !! el argumento que se analiza
 
+    character(len=50):: resultsFile,configFile
+    COMMON resultsFile,configFile
+
+
     i = iargc()
     if(i>0) then
-        call getarg(i,cmd)
-        if(cmd == '-h') then
-            write(*,*) 'Las opciones disponibles son:'
-            write(*,*) '-h para ver esta ayuda'
-            write(*,*) '-a para activar la impresion de los datos de factorizacion'
-            call exit(0)
-        end if
-        if(cmd == '-a') then
-            write(*,*) 'Se ha activado la impresion de los datos de factorizacion.'
-            asserts = .TRUE.
-        end if
+        do i=1,iargc()
+            call getarg(i,cmd)
+            if(cmd == '-h') then
+                write(*,*) 'Las opciones disponibles son:'
+                write(*,*) '-h para ver esta ayuda'
+                write(*,*) '-a para activar la impresion de los datos de factorizacion'
+                write(*,*) '-c [FILENAME] para usar un programa de configuracion con los datos'
+                call exit(0)
+            end if
+            if(cmd == '-a') then
+                write(*,*) 'Se ha activado la impresion de los datos de factorizacion.'
+                asserts = .TRUE.
+            end if
+            if(cmd == '-c') then
+                write(*,*) 'Se usara para los datos el siguiente config file: '
+                call getarg(i+1,configFile)
+                write(*,*) configFile
+                exit
+            end if
+        end do
+
     end if
 end subroutine
 
 !< Imprime un mensaje de bienvenida
 subroutine bienvenido()
-    write(*,*) ".______    __          ___      .__   __.  __  ___      _______. __    __   _______  __       __      "
-    write(*,*) "|   _  \  |  |        /   \     |  \ |  | |  |/  /     /       ||  |  |  | |   ____||  |     |  |     "
-    write(*,*) "|  |_)  | |  |       /  ^  \    |   \|  | |  '  /     |   (----`|  |__|  | |  |__   |  |     |  |     "
-    write(*,*) "|   ___/  |  |      /  /_\  \   |  . `  | |    <       \   \    |   __   | |   __|  |  |     |  |     "
-    write(*,*) "|  |      |  `----./  _____  \  |  |\   | |  .  \  .----)   |   |  |  |  | |  |____ |  `----.|  `----."
-    write(*,*) "| _|      |_______/__/     \__\ |__| \__| |__|\__\ |_______/    |__|  |__| |_______||_______||_______|"
+
+    write(*,*) "                                  ,--,      ,--,           ,----,                     "
+    write(*,*) "                               ,---.'|   ,---.'|         ,/   .`|                     "
+    write(*,*) "           .---.   ,---,       |   | :   |   | :       ,`   .'  :   ,---,.,-.----.    "
+    write(*,*) "          /. ./|  '  .' \      :   : |   :   : |     ;    ;     / ,'  .' |\    /  \   "
+    write(*,*) "      .--'.  ' ; /  ;    '.    |   ' :   |   ' :   .'___,/    ,',---.'   |;   :    \  "
+    write(*,*) "     /__./ \ : |:  :       \   ;   ; '   ;   ; '   |    :     | |   |   .'|   | .\ :  "
+    write(*,*) " .--'.  '   \' .:  |   /\   \  '   | |__ '   | |__ ;    |.';  ; :   :  |-,.   : |: |  "
+    write(*,*) "/___/ \ |    ' '|  :  ' ;.   : |   | :.'||   | :.'|`----'  |  | :   |  ;/||   |  \ :  "
+    write(*,*) ";   \  \;      :|  |  ;/  \   \'   :    ;'   :    ;    '   :  ; |   :   .'|   : .  /  "
+    write(*,*) " \   ;  `      |'  :  | \  \ ,'|   |  ./ |   |  ./     |   |  ' |   |  |-,;   | |  \  "
+    write(*,*) "  .   \    .\  ;|  |  '  '--'  ;   : ;   ;   : ;       '   :  | '   :  ;/||   | ;\  \ "
+    write(*,*) "   \   \   ' \ ||  :  :        |   ,/    |   ,/        ;   |.'  |   |    \:   ' | \.' "
+    write(*,*) "    :   '  |--' |  | ,'        '---'     '---'         '---'    |   :   .':   : :-'   "
+    write(*,*) "     \   \ ;    `--''                                           |   | ,'  |   |.'     "
+    write(*,*) "      '---'                                                     `----'    `---'       "
+
 
     write(*,*) "Bienvenido -------> "
     write(*,'(20X,A)') "Pulse enter para continuar"
@@ -156,66 +197,121 @@ subroutine bienvenido()
 end subroutine
 
 !< Solicita los datos necesarios para el calculo de la flecha.
-subroutine datosPlaca(ancho,largo,espesor,coefMat,n,m)
+subroutine datosPlaca(ancho,largo,espesor,rigidez,n,m)
     integer*4,intent(out):: n,m                 !! numero de puntos para discretizar la placa
     real*8,intent(out):: largo, ancho, espesor  !! dimensiones de la placa
-    real*8,intent(out):: coefMat                !! E*t^3/(12(1-v^2))
+    real*8,intent(out):: rigidez                !! rigidez a flexion -> D = E*t^3/(12(1-v^2))
+
     real*8:: Young                              !! Modulo de Young
-    real*8:: poisson                            !! Coeficiente de Poisson6
+    real*8:: poisson                            !! Coeficiente de Poisson
 
-    ! Datos tecnicos de la placa
-    write(*,*) "*************************"
-    write(*,*) "*   DATOS DE LA PLACA   *"
-    write(*,*) "*************************"
-    write(*,*) "-> ancho de la placa"
-    write(*,'(A,$)') "(metros) "
-    read(*,*) ancho
-    write(*,*) "-> largo de la placa"
-    write(*,'(A,$)') "(metros) "
-    read(*,*) largo
-    write(*,*) "-> espesor de la placa"
-    write(*,'(A,$)') "(metros) "
-    read(*,*) espesor
+    logical:: exists = .FALSE.                  !! existe el archivo de configuracion?
+    character(len=50):: label                   !! etiquetas del archivo de configuracion
 
-    ! datos para la discretizacion del modelo
-    write(*,*) "*************************"
-    write(*,*) "*   NUMERO DE PUNTOS    *"
-    write(*,*) "*************************"
-    write(*,*) "-> puntos para discretizar el ancho"
-    write(*,'(A,$)') "(integer) "
-    read(*,*) n
-    write(*,*) "-> puntos para discretizar el largo"
-    write(*,'(A,$)') "(integer) "
-    read(*,*) m
+    character(len=50):: resultsFile,configFile
+    COMMON resultsFile,configFile
 
-    ! propiedades del material
-    write(*,*) "*************************"
-    write(*,*) "*   DATOS DEL MATERIAL  *"
-    write(*,*) "*************************"
-    write(*,*) "-> Modulo de Young"
-    write(*,'(A,$)') "(MPa) "
-    read(*,*) Young
-    write(*,*) "-> Coef. de poisson"
-    write(*,'(A,$)') "(_real_) "
-    read(*,*) poisson
+    ! comprueba que se haya definido un archivo de configuracion y de que existe
+    if(configFile /= '') then
+        inquire(file=configFile,exist=exists)
+        if(.NOT.exists) then
+            write(*,*) 'No se ha encontrado el archivo de configuracion.'
+            write(*,*)
+        end if
+    end if
+
+    ! si existe se abre y se lee la informacion
+    if(exists) then
+        open(unit=24,file=configFile,status='old',action='read')    ! se abre
+        ! se lee la informacion, quitando las etiquetas
+        ! importante el orden
+        read(24,*) label
+        read(24,*) label,ancho
+        read(24,*) label,largo
+        read(24,*) label,espesor
+        read(24,*) label
+        read(24,*) label,n
+        read(24,*) label,m
+        read(24,*) label
+        read(24,*) label,Young
+        read(24,*) label,poisson
+
+        ! se imprime los datos obtenidos por si el usuario los quiere cambiar
+        write(*,*) "Datos config file ::"
+        write(*,'(5X,A,f0.3,A,f0.3,A,f0.3)') "Datos placa ->",ancho," x ",largo," x ",espesor
+        write(*,'(5X,A,i2,A,i2,A)') "Datos discretizacion [n,m] -> [",n,",",m,"]"
+        write(*,'(5X,A,f0.1,A,f0.3)') "Datos material -> Young:: ",Young,"; poisson:: ",poisson
+
+    else
+        write(*,*) 'Se procede a pedir los datos al usuario.'
+        write(*,*) 'Si se equivoca en algun numero podra cambiarlo al final de programa'
+
+        ! Datos tecnicos de la placa
+        write(*,*) "*************************"
+        write(*,*) "*   DATOS DE LA PLACA   *"
+        write(*,*) "*************************"
+        write(*,*) "-> ancho de la placa"
+        write(*,'(A,$)') "(metros) "
+        read(*,*) ancho
+        write(*,*) "-> largo de la placa"
+        write(*,'(A,$)') "(metros) "
+        read(*,*) largo
+        write(*,*) "-> espesor de la placa"
+        write(*,'(A,$)') "(metros) "
+        read(*,*) espesor
+
+        ! datos para la discretizacion del modelo
+        write(*,*) "*************************"
+        write(*,*) "*   NUMERO DE PUNTOS    *"
+        write(*,*) "*************************"
+        write(*,*) "-> puntos para discretizar el ancho"
+        write(*,'(A,$)') "(integer) "
+        read(*,*) n
+        write(*,*) "-> puntos para discretizar el largo"
+        write(*,'(A,$)') "(integer) "
+        read(*,*) m
+
+        ! propiedades del material
+        write(*,*) "*************************"
+        write(*,*) "*   DATOS DEL MATERIAL  *"
+        write(*,*) "*************************"
+        write(*,*) "-> Modulo de Young"
+        write(*,'(A,$)') "(MPa) "
+        read(*,*) Young
+        write(*,*) "-> Coef. de poisson"
+        write(*,'(A,$)') "(_real_) "
+        read(*,*) poisson
+    end if
 
     ! MPa (N/mm3) -> 1000 KPa (kN/m2)
-    coefMat = Young*1000*espesor**3
-    coefMat = coefMat/(12*(1-poisson**2))
+    rigidez = Young*1000*espesor**3
+    rigidez = rigidez/(12*(1-poisson**2))
+
+    ! EXPORT HTML
+    call createHTML("resultados")
+    call exportMaterial(Young,poisson)
+    call exportPlaca(largo,ancho,espesor)
 end subroutine
 
 !< Calculo los terminos de la matriz y el vector de terminso independientes y
 !  los coloca en su sitio. La matriz se almacena en banda.
-subroutine constructor(matriz,f,n,m)
+subroutine constructor(matriz,f,navier,n,m)
     real*8,dimension(:,:),allocatable,intent(inout):: matriz
     real*8,dimension(:),allocatable,intent(inout):: f
+    real*8,dimension(:,:),allocatable,intent(inout):: navier
     integer,intent(out):: n,m
 
     real*8:: ancho,largo,espesor,A,B,C,deltaX,deltaY
-    real*8:: coefMat,presion
+    real*8:: rigidez,presion
     integer:: i,j
 
-    call datosPlaca(ancho,largo,espesor,coefMat,n,m)
+    character(len=50):: resultsFile,configFile
+    COMMON resultsFile,configFile
+
+    call datosPlaca(ancho,largo,espesor,rigidez,n,m)
+
+    allocate(navier(n,m))
+    call analiticaNavier(navier,ancho,largo,rigidez,n,m)
 
     ! calculo de los coef A, B y C
     deltaX = ancho / (n + 1)
@@ -249,7 +345,7 @@ subroutine constructor(matriz,f,n,m)
     j = 1
     do i=1,n*m
         ! peso especifico agua = 10000 N / m3 -> 10 kN / m3
-        presion = 10*(largo/2-j*deltaY)/coefMat
+        presion = 10*(largo/2-j*deltaY)/rigidez
 
         !solo hasta la mitad
         if (presion < 0) then
@@ -317,4 +413,147 @@ subroutine linearSystem (matriz, f, n, m)
         end do
         f(i) = f(i) - suma
     end do
+end subroutine
+
+subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
+    real*8,intent(in):: ancho,largo
+    real*8,intent(in):: rigidez
+    real*8,dimension(n,m),intent(out):: w
+    integer,intent(in):: n, m
+
+    integer:: i, j, p, q
+    integer:: k, u
+    real*8:: deltaX, deltaY, X, Y
+    real*8:: p_ij, w_ij
+    real*8:: pi = acos(-1.0d0)
+
+    ! datos para el bucle de calculo de flecha
+    write(*,*) 'Número de iteraciones para el calculo analitico:'
+    write(*,'(A,$)') 'n (interger):'
+    read(*,*) r
+    write(*,'(A,$)') 'm (interger):'
+    read(*,*) s
+
+    !calculamos deltaX y deltaY
+    deltaX = ancho / (n + 1)
+    deltaY = largo / (m + 1)
+
+    ! ceros en w
+    do i=1,n
+        do j=1,m
+            w(i,j) = 0
+        end do
+    end do
+    !bucle para cada x e y
+    do i=1,n
+        X = i*deltaX
+        do j=1,m
+            Y = j*deltaY
+            !bucle para el calculo de la flecha
+            do k=1,r
+                do u=1,s
+                    p_ku = 4 * largo * 10 * sin(k*pi/2)**2 / (k * u**2 * pi**3)
+                    p_ku = p_ku * (u * pi - 2 * sin(u*pi/2))
+
+                    w_ku =(k**2 / ancho**2 + u**2 / largo**2)
+                    w_ku = w_ku**2
+                    w_ku = p_ku / (pi**4 * rigidez * w_ku)
+
+                    w(i,j) = w(i,j) + w_ku * sin(k*pi*X/ancho) * sin(u*pi*Y/largo)
+                end do
+            end do
+        end do
+    end do
+
+    do i=1,ubound(w,1)
+        write(*,'(*(f0.4,5x))') (w(i,j),j=1,ubound(w,2))
+    end do
+
+end subroutine
+
+subroutine createHTML(name)
+    character(len=*),intent(in):: name
+
+    character(len=50):: resultsFile,configFile
+    COMMON resultsFile,configFile
+
+
+    open(unit=12,file=resultsFile)
+    write(12,*) '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'
+    write(12,*) '<head>'
+	write(12,*) '<title>',name,'</title>'
+	write(12,*) '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'
+	write(12,*) '<meta name="description" content="" />'
+	write(12,*) '<meta name="keywords" content="" />'
+	write(12,*) '<meta name="robots" content="index,follow" />'
+	write(12,*) '<link rel="stylesheet" type="text/css" href="./css/style.css" />'
+    write(12,*) '</head>'
+    write(12,*) '<body>'
+    write(12,*) '<div class="row">'
+    write(12,*) '<div class="header">'
+    write(12,*) '<h1> Resultados del programa </h1>'
+    write(12,*) '</div>'
+	write(12,*) '</div>'
+	close(12)
+end subroutine
+
+subroutine exportMaterial(Young,poisson)
+    real*8,intent(in):: Young,poisson
+    character(len=50):: resultsFile,configFile
+    COMMON resultsFile,configFile
+
+    open(unit=12,file=resultsFile,status='old',position="append")
+    write(12,*) '<div class="row">'
+    write(12,*) '<div class="box-item">'
+    write(12,*) '<header> Material </header>'
+    write(12,*) '<p> El material empleado es : 	</p>'
+    write(12,*) '<table>'
+    write(12,*) '<tr><td>E = ',Young,'MPa</td></tr>'
+    write(12,*) '<tr><td>v = ',poisson,'</td></tr>'
+    write(12,*) '</table>'
+    close(12)
+end subroutine
+
+subroutine exportPlaca(largo,ancho,espesor)
+    real*8,intent(in):: largo,ancho,espesor
+    character(len=50):: resultsFile,configFile
+    COMMON resultsFile,configFile
+
+    open(unit=12,file=resultsFile,status='old',position="append")
+    write(12,*) '<header> Placa </header>'
+    write(12,*) '<p>Las medidas de la placa son:</p>'
+    write(12,*) '<table>'
+    write(12,*) '<tr><td>Largo = ',largo,' m</td></tr>'
+    write(12,*) '<tr><td>Ancho = ',ancho,' m</td></tr>'
+    write(12,*) '<tr><td>Espesor = ',espesor,' m</td></tr>'
+    write(12,*) '</table>'
+    write(12,*) '</div>'
+    close(12)
+end subroutine
+
+subroutine exportResultados(fMatriz,n,m)
+    real*8,dimension(n,m),intent(in):: fMatriz
+    integer,intent(in):: n,m
+    character(len=50):: resultsFile,configFile
+    COMMON resultsFile,configFile
+
+    open(unit=12,file=resultsFile,status='old',position="append")
+    write(12,*) '<div class="box-item" id="resultados">'
+    write(12,*) '<header id="azul"> Resultados </header>'
+    write(12,*) '<table>'
+
+    write(12,*) '<th rowspan="',m+2,'"> Y </th>'
+    write(12,*) '<th colspan="',n,'"> X </th>'
+    write(12,*) '<tr class="tr-header">'
+    write(12,*) ('<td>',2*j,'</td>',j=1,m)
+    write(12,*) '</tr>'
+
+    do i=1,n
+        write(12,*) '<tr>'
+        write(12,'(*(A,f0.4,5x,A))') ('<td>',fMatriz(i,j),'</td>',j=1,m)
+        write(12,*) '</tr>'
+    end do
+
+    write(12,*)'</table>'
+    close(12)
 end subroutine

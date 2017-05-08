@@ -52,11 +52,6 @@ html
 	margin: 10px;
 }
 
-.box-item th {
-	border: 1px solid #ddd;
-	padding: 8px;
-}
-
 .box-item td {
 	border: 1px solid #ddd;
 	padding: 8px;
@@ -75,3 +70,9 @@ html
 {
 	flex-grow: 3;
 }
+
+#resultados .tr-h, #resultados .td-h {
+	font-weight: bold;
+	text-align: center;
+}
+

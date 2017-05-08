@@ -71,7 +71,7 @@ All Procedures &ndash; Fortran Program
 				
 								
 				
-            <li><a href="../program/cn.html">Program</a></li>
+            <li><a href="../program/wallter.html">Program</a></li>
 	    
             </ul>
             </li>
@@ -85,7 +85,7 @@ All Procedures &ndash; Fortran Program
 
                              
 
-<li class="visible-xs hidden-sm visible-lg"><a href="../program/cn.html">Program</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/wallter.html">Program</a></li>
 
           </ul>
         
@@ -111,6 +111,8 @@ All Procedures &ndash; Fortran Program
 			 <thead><tr><th>Procedure</th><th>Location</th><th>Procedure Type</th><th>Description</th></tr></thead>
 			 <tbody>
 			 
+			   <tr><td><a href='../proc/analiticanavier.html'>analiticaNavier</a></td><td><a href='../sourcefile/main.f95.html'>main.f95</a></td><td>Subroutine</td><td></td></tr>
+			 
 			   <tr><td><a href='../proc/bienvenido.html'>bienvenido</a></td><td><a href='../sourcefile/main.f95.html'>main.f95</a></td><td>Subroutine</td><td><p>Imprime un mensaje de bienvenida</p></td></tr>
 			 
 			   <tr><td><a href='../proc/commandline.html'>commandLine</a></td><td><a href='../sourcefile/main.f95.html'>main.f95</a></td><td>Subroutine</td><td><p>Analiza los argumentos cuando se ejecuto el programa.
@@ -120,14 +122,22 @@ All Procedures &ndash; Fortran Program
 			   <tr><td><a href='../proc/constructor.html'>constructor</a></td><td><a href='../sourcefile/main.f95.html'>main.f95</a></td><td>Subroutine</td><td><p>Calculo los terminos de la matriz y el vector de terminso independientes y
   los coloca en su sitio. La matriz se almacena en banda.</p></td></tr>
 			 
-			   <tr><td><a href='../interface/constructor.html'>constructor</a></td><td><a href='../program/cn.html'>CN</a></td><td>Interface</td><td><p>Interface para poder fijar las dimensiones de la matriz en la
+			   <tr><td><a href='../interface/constructor.html'>constructor</a></td><td><a href='../program/wallter.html'>WALLTER</a></td><td>Interface</td><td><p>Interface para poder fijar las dimensiones de la matriz en la
  subroutine constructor</p></td></tr>
+			 
+			   <tr><td><a href='../proc/createhtml.html'>createHTML</a></td><td><a href='../sourcefile/main.f95.html'>main.f95</a></td><td>Subroutine</td><td></td></tr>
 			 
 			   <tr><td><a href='../proc/datosplaca.html'>datosPlaca</a></td><td><a href='../sourcefile/main.f95.html'>main.f95</a></td><td>Subroutine</td><td><p>Solicita los datos necesarios para el calculo de la flecha.</p></td></tr>
 			 
+			   <tr><td><a href='../proc/exportmaterial.html'>exportMaterial</a></td><td><a href='../sourcefile/main.f95.html'>main.f95</a></td><td>Subroutine</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/exportplaca.html'>exportPlaca</a></td><td><a href='../sourcefile/main.f95.html'>main.f95</a></td><td>Subroutine</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/exportresultados.html'>exportResultados</a></td><td><a href='../sourcefile/main.f95.html'>main.f95</a></td><td>Subroutine</td><td></td></tr>
+			 
 			   <tr><td><a href='../proc/fcholesky.html'>fCholesky</a></td><td><a href='../sourcefile/main.f95.html'>main.f95</a></td><td>Subroutine</td><td><p>Factorización de Cholesky -&gt; A = L * D * Transpose[L]</p></td></tr>
 			 
-			   <tr><td><a href='../proc/header.html'>header</a></td><td><a href='../program/cn.html'>CN</a></td><td>Subroutine</td><td><p>Imprime una linea, un texto centrado y una línea.
+			   <tr><td><a href='../proc/header.html'>header</a></td><td><a href='../program/wallter.html'>WALLTER</a></td><td>Subroutine</td><td><p>Imprime una linea, un texto centrado y una línea.
  Creando como un titulo.</p></td></tr>
 			 
 			   <tr><td><a href='../proc/linea.html'>linea</a></td><td><a href='../sourcefile/main.f95.html'>main.f95</a></td><td>Subroutine</td><td><p>Imprime una línea de 60 caracteres.
@@ -135,9 +145,9 @@ All Procedures &ndash; Fortran Program
 			 
 			   <tr><td><a href='../proc/linearsystem.html'>linearSystem</a></td><td><a href='../sourcefile/main.f95.html'>main.f95</a></td><td>Subroutine</td><td><p>Resolucion del sistema de ecuaciones para una matriz en banda factorizada</p></td></tr>
 			 
-			   <tr><td><a href='../proc/printmatrix.html'>printMatrix</a></td><td><a href='../program/cn.html'>CN</a></td><td>Subroutine</td><td><p>Imprime una matriz mas un texto como titulo.</p></td></tr>
+			   <tr><td><a href='../proc/printmatrix.html'>printMatrix</a></td><td><a href='../program/wallter.html'>WALLTER</a></td><td>Subroutine</td><td><p>Imprime una matriz mas un texto como titulo.</p></td></tr>
 			 
-			   <tr><td><a href='../proc/printvector.html'>printVector</a></td><td><a href='../program/cn.html'>CN</a></td><td>Subroutine</td><td><p>Imprime un vector mas un texto como titulo</p></td></tr>
+			   <tr><td><a href='../proc/printvector.html'>printVector</a></td><td><a href='../program/wallter.html'>WALLTER</a></td><td>Subroutine</td><td><p>Imprime un vector mas un texto como titulo</p></td></tr>
 			 
 			 </tbody></table>
              
@@ -147,171 +157,236 @@ All Procedures &ndash; Fortran Program
 <!-- Generated by graphviz version 2.38.0 (20140413.2041)
  -->
 <!-- Title: call~~graph~~CallGraph Pages: 1 -->
-<svg id="callgraphCallGraph" width="369pt" height="326pt"
- viewBox="0.00 0.00 369.00 326.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="call~~graph~~CallGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 322)">
+<svg id="callgraphCallGraph" width="410pt" height="452pt"
+ viewBox="0.00 0.00 410.00 452.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="call~~graph~~CallGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 448)">
 <title>call~~graph~~CallGraph</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-322 365,-322 365,4 -4,4"/>
-<!-- interface~constructor -->
-<g id="call~~graph~~CallGraph_node1" class="node"><title>interface~constructor</title>
-<g id="a_call~~graph~~CallGraph_node1"><a xlink:href="../interface/constructor.html" xlink:title="constructor">
-<polygon fill="#a7506f" stroke="#a7506f" points="174.5,-276 108.5,-276 108.5,-252 174.5,-252 174.5,-276"/>
-<text text-anchor="middle" x="141.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">constructor</text>
+<polygon fill="white" stroke="none" points="-4,4 -4,-448 406,-448 406,4 -4,4"/>
+<!-- proc~exportresultados -->
+<g id="call~~graph~~CallGraph_node1" class="node"><title>proc~exportresultados</title>
+<g id="a_call~~graph~~CallGraph_node1"><a xlink:href="../proc/exportresultados.html" xlink:title="exportResultados">
+<polygon fill="#d9534f" stroke="#d9534f" points="197,-318 102,-318 102,-294 197,-294 197,-318"/>
+<text text-anchor="middle" x="149.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exportResultados</text>
 </a>
 </g>
 </g>
-<!-- proc~fcholesky -->
-<g id="call~~graph~~CallGraph_node2" class="node"><title>proc~fcholesky</title>
-<g id="a_call~~graph~~CallGraph_node2"><a xlink:href="../proc/fcholesky.html" xlink:title="fCholesky">
-<polygon fill="#d9534f" stroke="#d9534f" points="171,-234 112,-234 112,-210 171,-210 171,-234"/>
-<text text-anchor="middle" x="141.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fCholesky</text>
-</a>
-</g>
-</g>
-<!-- proc~printmatrix -->
-<g id="call~~graph~~CallGraph_node3" class="node"><title>proc~printmatrix</title>
-<g id="a_call~~graph~~CallGraph_node3"><a xlink:href="../proc/printmatrix.html" xlink:title="printMatrix">
-<polygon fill="#d9534f" stroke="#d9534f" points="172,-192 111,-192 111,-168 172,-168 172,-192"/>
-<text text-anchor="middle" x="141.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">printMatrix</text>
+<!-- proc~exportplaca -->
+<g id="call~~graph~~CallGraph_node2" class="node"><title>proc~exportplaca</title>
+<g id="a_call~~graph~~CallGraph_node2"><a xlink:href="../proc/exportplaca.html" xlink:title="exportPlaca">
+<polygon fill="#d9534f" stroke="#d9534f" points="306.5,-444 238.5,-444 238.5,-420 306.5,-420 306.5,-444"/>
+<text text-anchor="middle" x="272.5" y="-429.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exportPlaca</text>
 </a>
 </g>
 </g>
 <!-- proc~header -->
-<g id="call~~graph~~CallGraph_node5" class="node"><title>proc~header</title>
-<g id="a_call~~graph~~CallGraph_node5"><a xlink:href="../proc/header.html" xlink:title="header">
-<polygon fill="#d9534f" stroke="#d9534f" points="271,-130 217,-130 217,-106 271,-106 271,-130"/>
-<text text-anchor="middle" x="244" y="-115.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">header</text>
+<g id="call~~graph~~CallGraph_node3" class="node"><title>proc~header</title>
+<g id="a_call~~graph~~CallGraph_node3"><a xlink:href="../proc/header.html" xlink:title="header">
+<polygon fill="#d9534f" stroke="#d9534f" points="299.5,-81 245.5,-81 245.5,-57 299.5,-57 299.5,-81"/>
+<text text-anchor="middle" x="272.5" y="-66.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">header</text>
 </a>
 </g>
-</g>
-<!-- proc~printmatrix&#45;&gt;proc~header -->
-<g id="call~~graph~~CallGraph_edge1" class="edge"><title>proc~printmatrix&#45;&gt;proc~header</title>
-<path fill="none" stroke="#000000" d="M165.482,-167.879C170.635,-165.047 176.042,-161.984 181,-159 193.127,-151.701 206.243,-143.131 217.275,-135.718"/>
-<polygon fill="#000000" stroke="#000000" points="219.3,-138.573 225.617,-130.068 215.374,-132.778 219.3,-138.573"/>
 </g>
 <!-- proc~linea -->
-<g id="call~~graph~~CallGraph_node8" class="node"><title>proc~linea</title>
-<g id="a_call~~graph~~CallGraph_node8"><a xlink:href="../proc/linea.html" xlink:title="linea">
-<polygon fill="#d9534f" stroke="#d9534f" points="361,-130 307,-130 307,-106 361,-106 361,-130"/>
-<text text-anchor="middle" x="334" y="-115.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">linea</text>
-</a>
-</g>
-</g>
-<!-- proc~printmatrix&#45;&gt;proc~linea -->
-<g id="call~~graph~~CallGraph_edge2" class="edge"><title>proc~printmatrix&#45;&gt;proc~linea</title>
-<path fill="none" stroke="#000000" d="M172.15,-170.704C198.226,-162.489 237.188,-150.12 271,-139 279.458,-136.219 288.546,-133.173 297.085,-130.285"/>
-<polygon fill="#000000" stroke="#000000" points="298.443,-133.52 306.788,-126.993 296.194,-126.891 298.443,-133.52"/>
-</g>
-<!-- proc~linearsystem -->
-<g id="call~~graph~~CallGraph_node4" class="node"><title>proc~linearsystem</title>
-<g id="a_call~~graph~~CallGraph_node4"><a xlink:href="../proc/linearsystem.html" xlink:title="linearSystem">
-<polygon fill="#d9534f" stroke="#d9534f" points="178,-150 105,-150 105,-126 178,-126 178,-150"/>
-<text text-anchor="middle" x="141.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">linearSystem</text>
+<g id="call~~graph~~CallGraph_node6" class="node"><title>proc~linea</title>
+<g id="a_call~~graph~~CallGraph_node6"><a xlink:href="../proc/linea.html" xlink:title="linea">
+<polygon fill="#d9534f" stroke="#d9534f" points="402,-81 348,-81 348,-57 402,-57 402,-81"/>
+<text text-anchor="middle" x="375" y="-66.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">linea</text>
 </a>
 </g>
 </g>
 <!-- proc~header&#45;&gt;proc~linea -->
-<g id="call~~graph~~CallGraph_edge3" class="edge"><title>proc~header&#45;&gt;proc~linea</title>
-<path fill="none" stroke="#000000" d="M271.403,-118C279.393,-118 288.311,-118 296.824,-118"/>
-<polygon fill="#000000" stroke="#000000" points="296.919,-121.5 306.919,-118 296.919,-114.5 296.919,-121.5"/>
+<g id="call~~graph~~CallGraph_edge1" class="edge"><title>proc~header&#45;&gt;proc~linea</title>
+<path fill="none" stroke="#000000" d="M299.643,-69C311.275,-69 325.165,-69 337.775,-69"/>
+<polygon fill="#000000" stroke="#000000" points="337.988,-72.5001 347.988,-69 337.988,-65.5001 337.988,-72.5001"/>
 </g>
-<!-- proc~commandline -->
-<g id="call~~graph~~CallGraph_node6" class="node"><title>proc~commandline</title>
-<g id="a_call~~graph~~CallGraph_node6"><a xlink:href="../proc/commandline.html" xlink:title="commandLine">
-<polygon fill="#d9534f" stroke="#d9534f" points="181,-108 102,-108 102,-84 181,-84 181,-108"/>
-<text text-anchor="middle" x="141.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">commandLine</text>
+<!-- proc~datosplaca -->
+<g id="call~~graph~~CallGraph_node4" class="node"><title>proc~datosplaca</title>
+<g id="a_call~~graph~~CallGraph_node4"><a xlink:href="../proc/datosplaca.html" xlink:title="datosPlaca">
+<polygon fill="#d9534f" stroke="#d9534f" points="182,-402 117,-402 117,-378 182,-378 182,-402"/>
+<text text-anchor="middle" x="149.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">datosPlaca</text>
 </a>
 </g>
 </g>
-<!-- proc~bienvenido -->
-<g id="call~~graph~~CallGraph_node7" class="node"><title>proc~bienvenido</title>
-<g id="a_call~~graph~~CallGraph_node7"><a xlink:href="../proc/bienvenido.html" xlink:title="bienvenido">
-<polygon fill="#d9534f" stroke="#d9534f" points="173.5,-66 109.5,-66 109.5,-42 173.5,-42 173.5,-66"/>
-<text text-anchor="middle" x="141.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">bienvenido</text>
+<!-- proc~datosplaca&#45;&gt;proc~exportplaca -->
+<g id="call~~graph~~CallGraph_edge4" class="edge"><title>proc~datosplaca&#45;&gt;proc~exportplaca</title>
+<path fill="none" stroke="#000000" d="M182.291,-401.035C196.421,-405.94 213.271,-411.788 228.501,-417.075"/>
+<polygon fill="#000000" stroke="#000000" points="227.636,-420.479 238.231,-420.452 229.932,-413.866 227.636,-420.479"/>
+</g>
+<!-- proc~exportmaterial -->
+<g id="call~~graph~~CallGraph_node5" class="node"><title>proc~exportmaterial</title>
+<g id="a_call~~graph~~CallGraph_node5"><a xlink:href="../proc/exportmaterial.html" xlink:title="exportMaterial">
+<polygon fill="#d9534f" stroke="#d9534f" points="312,-402 233,-402 233,-378 312,-378 312,-402"/>
+<text text-anchor="middle" x="272.5" y="-387.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exportMaterial</text>
+</a>
+</g>
+</g>
+<!-- proc~datosplaca&#45;&gt;proc~exportmaterial -->
+<g id="call~~graph~~CallGraph_edge3" class="edge"><title>proc~datosplaca&#45;&gt;proc~exportmaterial</title>
+<path fill="none" stroke="#000000" d="M182.291,-390C194.567,-390 208.895,-390 222.431,-390"/>
+<polygon fill="#000000" stroke="#000000" points="222.58,-393.5 232.58,-390 222.58,-386.5 222.58,-393.5"/>
+</g>
+<!-- proc~createhtml -->
+<g id="call~~graph~~CallGraph_node16" class="node"><title>proc~createhtml</title>
+<g id="a_call~~graph~~CallGraph_node16"><a xlink:href="../proc/createhtml.html" xlink:title="createHTML">
+<polygon fill="#d9534f" stroke="#d9534f" points="307.5,-360 237.5,-360 237.5,-336 307.5,-336 307.5,-360"/>
+<text text-anchor="middle" x="272.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">createHTML</text>
+</a>
+</g>
+</g>
+<!-- proc~datosplaca&#45;&gt;proc~createhtml -->
+<g id="call~~graph~~CallGraph_edge2" class="edge"><title>proc~datosplaca&#45;&gt;proc~createhtml</title>
+<path fill="none" stroke="#000000" d="M182.291,-378.965C196.191,-374.14 212.723,-368.402 227.757,-363.184"/>
+<polygon fill="#000000" stroke="#000000" points="229.078,-366.43 237.377,-359.844 226.782,-359.817 229.078,-366.43"/>
+</g>
+<!-- proc~fcholesky -->
+<g id="call~~graph~~CallGraph_node7" class="node"><title>proc~fcholesky</title>
+<g id="a_call~~graph~~CallGraph_node7"><a xlink:href="../proc/fcholesky.html" xlink:title="fCholesky">
+<polygon fill="#d9534f" stroke="#d9534f" points="179,-276 120,-276 120,-252 179,-252 179,-276"/>
+<text text-anchor="middle" x="149.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fCholesky</text>
+</a>
+</g>
+</g>
+<!-- proc~commandline -->
+<g id="call~~graph~~CallGraph_node8" class="node"><title>proc~commandline</title>
+<g id="a_call~~graph~~CallGraph_node8"><a xlink:href="../proc/commandline.html" xlink:title="commandLine">
+<polygon fill="#d9534f" stroke="#d9534f" points="189,-234 110,-234 110,-210 189,-210 189,-234"/>
+<text text-anchor="middle" x="149.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">commandLine</text>
+</a>
+</g>
+</g>
+<!-- proc~linearsystem -->
+<g id="call~~graph~~CallGraph_node9" class="node"><title>proc~linearsystem</title>
+<g id="a_call~~graph~~CallGraph_node9"><a xlink:href="../proc/linearsystem.html" xlink:title="linearSystem">
+<polygon fill="#d9534f" stroke="#d9534f" points="186,-192 113,-192 113,-168 186,-168 186,-192"/>
+<text text-anchor="middle" x="149.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">linearSystem</text>
 </a>
 </g>
 </g>
 <!-- proc~printvector -->
-<g id="call~~graph~~CallGraph_node9" class="node"><title>proc~printvector</title>
-<g id="a_call~~graph~~CallGraph_node9"><a xlink:href="../proc/printvector.html" xlink:title="printVector">
-<polygon fill="#d9534f" stroke="#d9534f" points="173.5,-24 109.5,-24 109.5,-0 173.5,-0 173.5,-24"/>
-<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">printVector</text>
+<g id="call~~graph~~CallGraph_node10" class="node"><title>proc~printvector</title>
+<g id="a_call~~graph~~CallGraph_node10"><a xlink:href="../proc/printvector.html" xlink:title="printVector">
+<polygon fill="#d9534f" stroke="#d9534f" points="181.5,-150 117.5,-150 117.5,-126 181.5,-126 181.5,-150"/>
+<text text-anchor="middle" x="149.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">printVector</text>
 </a>
 </g>
 </g>
 <!-- proc~printvector&#45;&gt;proc~header -->
-<g id="call~~graph~~CallGraph_edge4" class="edge"><title>proc~printvector&#45;&gt;proc~header</title>
-<path fill="none" stroke="#000000" d="M168.399,-24.0569C172.833,-26.686 177.222,-29.6867 181,-33 202.049,-51.4607 220.119,-78.2876 231.231,-96.8439"/>
-<polygon fill="#000000" stroke="#000000" points="228.333,-98.8221 236.387,-105.706 234.384,-95.3019 228.333,-98.8221"/>
+<g id="call~~graph~~CallGraph_edge5" class="edge"><title>proc~printvector&#45;&gt;proc~header</title>
+<path fill="none" stroke="#000000" d="M178.859,-126C184.928,-123.209 191.242,-120.133 197,-117 213.63,-107.952 231.485,-96.5127 245.546,-87.0711"/>
+<polygon fill="#000000" stroke="#000000" points="247.882,-89.7153 254.186,-81.2003 243.948,-83.9253 247.882,-89.7153"/>
 </g>
 <!-- proc~printvector&#45;&gt;proc~linea -->
-<g id="call~~graph~~CallGraph_edge5" class="edge"><title>proc~printvector&#45;&gt;proc~linea</title>
-<path fill="none" stroke="#000000" d="M164.916,-24.1751C170.197,-27.0577 175.802,-30.1288 181,-33 223.214,-56.3152 271.83,-83.5734 302.483,-100.811"/>
-<polygon fill="#000000" stroke="#000000" points="300.961,-103.97 311.393,-105.823 304.393,-97.8693 300.961,-103.97"/>
+<g id="call~~graph~~CallGraph_edge6" class="edge"><title>proc~printvector&#45;&gt;proc~linea</title>
+<path fill="none" stroke="#000000" d="M181.567,-129.143C214.163,-119.762 266.841,-104.353 312,-90 320.485,-87.3031 329.583,-84.2901 338.125,-81.4071"/>
+<polygon fill="#000000" stroke="#000000" points="339.485,-84.6416 347.826,-78.1091 337.232,-78.0141 339.485,-84.6416"/>
 </g>
-<!-- proc~constructor -->
-<g id="call~~graph~~CallGraph_node10" class="node"><title>proc~constructor</title>
-<g id="a_call~~graph~~CallGraph_node10"><a xlink:href="../proc/constructor.html" xlink:title="constructor">
-<polygon fill="#d9534f" stroke="#d9534f" points="66,-318 0,-318 0,-294 66,-294 66,-318"/>
-<text text-anchor="middle" x="33" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">constructor</text>
+<!-- interface~constructor -->
+<g id="call~~graph~~CallGraph_node11" class="node"><title>interface~constructor</title>
+<g id="a_call~~graph~~CallGraph_node11"><a xlink:href="../interface/constructor.html" xlink:title="constructor">
+<polygon fill="#a7506f" stroke="#a7506f" points="182.5,-108 116.5,-108 116.5,-84 182.5,-84 182.5,-108"/>
+<text text-anchor="middle" x="149.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">constructor</text>
 </a>
 </g>
 </g>
-<!-- proc~datosplaca -->
-<g id="call~~graph~~CallGraph_node11" class="node"><title>proc~datosplaca</title>
-<g id="a_call~~graph~~CallGraph_node11"><a xlink:href="../proc/datosplaca.html" xlink:title="datosPlaca">
-<polygon fill="#d9534f" stroke="#d9534f" points="174,-318 109,-318 109,-294 174,-294 174,-318"/>
-<text text-anchor="middle" x="141.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">datosPlaca</text>
+<!-- proc~bienvenido -->
+<g id="call~~graph~~CallGraph_node12" class="node"><title>proc~bienvenido</title>
+<g id="a_call~~graph~~CallGraph_node12"><a xlink:href="../proc/bienvenido.html" xlink:title="bienvenido">
+<polygon fill="#d9534f" stroke="#d9534f" points="181.5,-66 117.5,-66 117.5,-42 181.5,-42 181.5,-66"/>
+<text text-anchor="middle" x="149.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">bienvenido</text>
+</a>
+</g>
+</g>
+<!-- proc~printmatrix -->
+<g id="call~~graph~~CallGraph_node13" class="node"><title>proc~printmatrix</title>
+<g id="a_call~~graph~~CallGraph_node13"><a xlink:href="../proc/printmatrix.html" xlink:title="printMatrix">
+<polygon fill="#d9534f" stroke="#d9534f" points="180,-24 119,-24 119,-0 180,-0 180,-24"/>
+<text text-anchor="middle" x="149.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">printMatrix</text>
+</a>
+</g>
+</g>
+<!-- proc~printmatrix&#45;&gt;proc~header -->
+<g id="call~~graph~~CallGraph_edge7" class="edge"><title>proc~printmatrix&#45;&gt;proc~header</title>
+<path fill="none" stroke="#000000" d="M177.602,-24.0968C183.979,-26.9826 190.741,-30.0748 197,-33 210.274,-39.2034 224.798,-46.1785 237.467,-52.3256"/>
+<polygon fill="#000000" stroke="#000000" points="236.22,-55.6109 246.743,-56.8385 239.282,-49.3163 236.22,-55.6109"/>
+</g>
+<!-- proc~printmatrix&#45;&gt;proc~linea -->
+<g id="call~~graph~~CallGraph_edge8" class="edge"><title>proc~printmatrix&#45;&gt;proc~linea</title>
+<path fill="none" stroke="#000000" d="M180.207,-17.6273C212.786,-24.0291 266.495,-35.2612 312,-48 320.574,-50.4002 329.707,-53.298 338.253,-56.1642"/>
+<polygon fill="#000000" stroke="#000000" points="337.354,-59.5556 347.948,-59.4825 339.62,-52.9327 337.354,-59.5556"/>
+</g>
+<!-- proc~constructor -->
+<g id="call~~graph~~CallGraph_node14" class="node"><title>proc~constructor</title>
+<g id="a_call~~graph~~CallGraph_node14"><a xlink:href="../proc/constructor.html" xlink:title="constructor">
+<polygon fill="#d9534f" stroke="#d9534f" points="66,-381 0,-381 0,-357 66,-357 66,-381"/>
+<text text-anchor="middle" x="33" y="-366.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">constructor</text>
 </a>
 </g>
 </g>
 <!-- proc~constructor&#45;&gt;proc~datosplaca -->
-<g id="call~~graph~~CallGraph_edge6" class="edge"><title>proc~constructor&#45;&gt;proc~datosplaca</title>
-<path fill="none" stroke="#000000" d="M66.2425,-306C76.4494,-306 87.8826,-306 98.6613,-306"/>
-<polygon fill="#000000" stroke="#000000" points="98.7336,-309.5 108.734,-306 98.7335,-302.5 98.7336,-309.5"/>
+<g id="call~~graph~~CallGraph_edge10" class="edge"><title>proc~constructor&#45;&gt;proc~datosplaca</title>
+<path fill="none" stroke="#000000" d="M66.1993,-374.906C78.8496,-377.226 93.5325,-379.919 106.964,-382.382"/>
+<polygon fill="#000000" stroke="#000000" points="106.47,-385.85 116.938,-384.211 107.733,-378.965 106.47,-385.85"/>
 </g>
-<!-- program~cn -->
-<g id="call~~graph~~CallGraph_node12" class="node"><title>program~cn</title>
-<g id="a_call~~graph~~CallGraph_node12"><a xlink:href="../program/cn.html" xlink:title="CN">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="60,-150 6,-150 6,-126 60,-126 60,-150"/>
-<text text-anchor="middle" x="33" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">CN</text>
+<!-- proc~analiticanavier -->
+<g id="call~~graph~~CallGraph_node15" class="node"><title>proc~analiticanavier</title>
+<g id="a_call~~graph~~CallGraph_node15"><a xlink:href="../proc/analiticanavier.html" xlink:title="analiticaNavier">
+<polygon fill="#d9534f" stroke="#d9534f" points="190.5,-360 108.5,-360 108.5,-336 190.5,-336 190.5,-360"/>
+<text text-anchor="middle" x="149.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">analiticaNavier</text>
 </a>
 </g>
 </g>
-<!-- program~cn&#45;&gt;interface~constructor -->
-<g id="call~~graph~~CallGraph_edge7" class="edge"><title>program~cn&#45;&gt;interface~constructor</title>
-<path fill="none" stroke="#000000" d="M39.3506,-150.076C49.1819,-171.159 71.9026,-215.089 102,-243 103.117,-244.035 104.294,-245.037 105.515,-246.004"/>
-<polygon fill="#000000" stroke="#000000" points="103.822,-249.088 114.045,-251.872 107.79,-243.321 103.822,-249.088"/>
+<!-- proc~constructor&#45;&gt;proc~analiticanavier -->
+<g id="call~~graph~~CallGraph_edge9" class="edge"><title>proc~constructor&#45;&gt;proc~analiticanavier</title>
+<path fill="none" stroke="#000000" d="M66.1993,-363.094C76.2265,-361.255 87.5308,-359.182 98.4769,-357.175"/>
+<polygon fill="#000000" stroke="#000000" points="99.1773,-360.605 108.382,-355.358 97.9145,-353.719 99.1773,-360.605"/>
 </g>
-<!-- program~cn&#45;&gt;proc~fcholesky -->
-<g id="call~~graph~~CallGraph_edge13" class="edge"><title>program~cn&#45;&gt;proc~fcholesky</title>
-<path fill="none" stroke="#000000" d="M45.2612,-150.103C58.1561,-163.546 80.3084,-185.406 102,-201 103.623,-202.167 105.318,-203.315 107.053,-204.436"/>
-<polygon fill="#000000" stroke="#000000" points="105.544,-207.613 115.915,-209.778 109.158,-201.618 105.544,-207.613"/>
+<!-- program~wallter -->
+<g id="call~~graph~~CallGraph_node17" class="node"><title>program~wallter</title>
+<g id="a_call~~graph~~CallGraph_node17"><a xlink:href="../program/wallter.html" xlink:title="WALLTER">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="64,-171 2,-171 2,-147 64,-147 64,-171"/>
+<text text-anchor="middle" x="33" y="-156.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">WALLTER</text>
+</a>
 </g>
-<!-- program~cn&#45;&gt;proc~printmatrix -->
-<g id="call~~graph~~CallGraph_edge11" class="edge"><title>program~cn&#45;&gt;proc~printmatrix</title>
-<path fill="none" stroke="#000000" d="M60.0528,-148.274C72.5614,-153.207 87.8068,-159.22 101.649,-164.678"/>
-<polygon fill="#000000" stroke="#000000" points="100.37,-167.936 110.956,-168.349 102.938,-161.424 100.37,-167.936"/>
 </g>
-<!-- program~cn&#45;&gt;proc~linearsystem -->
-<g id="call~~graph~~CallGraph_edge9" class="edge"><title>program~cn&#45;&gt;proc~linearsystem</title>
-<path fill="none" stroke="#000000" d="M60.0528,-138C70.4359,-138 82.7047,-138 94.4912,-138"/>
-<polygon fill="#000000" stroke="#000000" points="94.6655,-141.5 104.665,-138 94.6654,-134.5 94.6655,-141.5"/>
+<!-- program~wallter&#45;&gt;proc~exportresultados -->
+<g id="call~~graph~~CallGraph_edge16" class="edge"><title>program~wallter&#45;&gt;proc~exportresultados</title>
+<path fill="none" stroke="#000000" d="M37.5808,-171.047C45.4304,-195.573 66.3536,-251.788 102,-285 103.248,-286.162 104.57,-287.269 105.95,-288.321"/>
+<polygon fill="#000000" stroke="#000000" points="104.053,-291.262 114.347,-293.767 107.862,-285.389 104.053,-291.262"/>
 </g>
-<!-- program~cn&#45;&gt;proc~commandline -->
-<g id="call~~graph~~CallGraph_edge10" class="edge"><title>program~cn&#45;&gt;proc~commandline</title>
-<path fill="none" stroke="#000000" d="M60.0528,-127.726C72.1438,-122.957 86.7919,-117.181 100.258,-111.87"/>
-<polygon fill="#000000" stroke="#000000" points="101.782,-115.031 109.801,-108.107 99.2139,-108.52 101.782,-115.031"/>
+<!-- program~wallter&#45;&gt;proc~fcholesky -->
+<g id="call~~graph~~CallGraph_edge11" class="edge"><title>program~wallter&#45;&gt;proc~fcholesky</title>
+<path fill="none" stroke="#000000" d="M41.1667,-171.062C52.2536,-188.852 75.1138,-222.252 102,-243 104.748,-245.121 107.744,-247.084 110.849,-248.889"/>
+<polygon fill="#000000" stroke="#000000" points="109.283,-252.02 119.766,-253.554 112.527,-245.817 109.283,-252.02"/>
 </g>
-<!-- program~cn&#45;&gt;proc~bienvenido -->
-<g id="call~~graph~~CallGraph_edge8" class="edge"><title>program~cn&#45;&gt;proc~bienvenido</title>
-<path fill="none" stroke="#000000" d="M45.2612,-125.897C58.1561,-112.454 80.3084,-90.5941 102,-75 103.623,-73.8334 105.318,-72.6852 107.053,-71.564"/>
-<polygon fill="#000000" stroke="#000000" points="109.158,-74.3818 115.915,-66.2215 105.544,-68.3869 109.158,-74.3818"/>
+<!-- program~wallter&#45;&gt;proc~commandline -->
+<g id="call~~graph~~CallGraph_edge15" class="edge"><title>program~wallter&#45;&gt;proc~commandline</title>
+<path fill="none" stroke="#000000" d="M52.0946,-171.065C65.5838,-179.838 84.6031,-191.749 102,-201 104.894,-202.539 107.922,-204.072 110.986,-205.568"/>
+<polygon fill="#000000" stroke="#000000" points="109.649,-208.807 120.186,-209.916 112.641,-202.478 109.649,-208.807"/>
 </g>
-<!-- program~cn&#45;&gt;proc~printvector -->
-<g id="call~~graph~~CallGraph_edge12" class="edge"><title>program~cn&#45;&gt;proc~printvector</title>
-<path fill="none" stroke="#000000" d="M39.3506,-125.924C49.1819,-104.841 71.9026,-60.9108 102,-33 103.117,-31.9646 104.294,-30.9628 105.515,-29.9956"/>
-<polygon fill="#000000" stroke="#000000" points="107.79,-32.6789 114.045,-24.1275 103.822,-26.9118 107.79,-32.6789"/>
+<!-- program~wallter&#45;&gt;proc~linearsystem -->
+<g id="call~~graph~~CallGraph_edge17" class="edge"><title>program~wallter&#45;&gt;proc~linearsystem</title>
+<path fill="none" stroke="#000000" d="M64.0835,-164.518C75.8993,-166.685 89.7249,-169.22 102.727,-171.605"/>
+<polygon fill="#000000" stroke="#000000" points="102.456,-175.114 112.924,-173.475 103.719,-168.228 102.456,-175.114"/>
+</g>
+<!-- program~wallter&#45;&gt;proc~printvector -->
+<g id="call~~graph~~CallGraph_edge14" class="edge"><title>program~wallter&#45;&gt;proc~printvector</title>
+<path fill="none" stroke="#000000" d="M64.0835,-153.482C77.3062,-151.057 93.046,-148.171 107.332,-145.551"/>
+<polygon fill="#000000" stroke="#000000" points="108.216,-148.947 117.42,-143.7 106.953,-142.062 108.216,-148.947"/>
+</g>
+<!-- program~wallter&#45;&gt;interface~constructor -->
+<g id="call~~graph~~CallGraph_edge18" class="edge"><title>program~wallter&#45;&gt;interface~constructor</title>
+<path fill="none" stroke="#000000" d="M52.0946,-146.935C65.5838,-138.162 84.6031,-126.251 102,-117 104.894,-115.461 107.922,-113.928 110.986,-112.432"/>
+<polygon fill="#000000" stroke="#000000" points="112.641,-115.522 120.186,-108.084 109.649,-109.193 112.641,-115.522"/>
+</g>
+<!-- program~wallter&#45;&gt;proc~bienvenido -->
+<g id="call~~graph~~CallGraph_edge13" class="edge"><title>program~wallter&#45;&gt;proc~bienvenido</title>
+<path fill="none" stroke="#000000" d="M41.1667,-146.938C52.2536,-129.148 75.1138,-95.7477 102,-75 104.025,-73.4374 106.185,-71.9601 108.423,-70.5688"/>
+<polygon fill="#000000" stroke="#000000" points="110.28,-73.5413 117.327,-65.63 106.885,-67.4198 110.28,-73.5413"/>
+</g>
+<!-- program~wallter&#45;&gt;proc~printmatrix -->
+<g id="call~~graph~~CallGraph_edge12" class="edge"><title>program~wallter&#45;&gt;proc~printmatrix</title>
+<path fill="none" stroke="#000000" d="M37.5808,-146.953C45.4304,-122.427 66.3536,-66.2115 102,-33 104.398,-30.7658 107.074,-28.7388 109.898,-26.9057"/>
+<polygon fill="#000000" stroke="#000000" points="111.675,-29.9219 118.682,-21.975 108.249,-23.8178 111.675,-29.9219"/>
 </g>
 </g>
 </svg>
