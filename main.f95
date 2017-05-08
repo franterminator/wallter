@@ -30,7 +30,7 @@ Program WALLTER
     call datos(ancho,largo,espesor,rigidez,n,m)
 
     allocate(matriz(n*m,n*m))
-    call constructMatriz(ancho,largo,espesor,matriz,n,m)
+    call constructMatriz(ancho,largo,matriz,n,m)
     allocate(f(n*m))
     call constructVector(largo,rigidez,f,n,m)
 
@@ -286,9 +286,9 @@ end subroutine
 
 !< Calculo los terminos de la matriz y el vector de terminso independientes y
 !  los coloca en su sitio. La matriz se almacena en banda.
-subroutine constructMatriz(ancho,largo,espesor,matriz,n,m)
+subroutine constructMatriz(ancho,largo,matriz,n,m)
     real*8,dimension(n*m,n*m),intent(inout):: matriz
-    real*8,intent(in):: ancho,largo,espesor
+    real*8,intent(in):: ancho,largo
     integer,intent(in):: n,m
 
     real*8:: A,B,C,deltaX,deltaY
@@ -416,18 +416,46 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
     real*8,dimension(m,n),intent(out):: w
     integer,intent(in):: n, m
 
-    integer:: i, j, p, q
+    integer:: i, j, r, s
     integer:: k, u
     real*8:: deltaX, deltaY, X, Y
-    real*8:: p_ij, w_ij
+    real*8:: p_ku, w_ku
     real*8:: pi = acos(-1.0d0)
 
-    ! datos para el bucle de calculo de flecha
-    write(*,*) 'Número de iteraciones para el calculo analitico:'
-    write(*,'(A,$)') 'n (interger):'
-    read(*,*) r
-    write(*,'(A,$)') 'm (interger):'
-    read(*,*) s
+    logical:: exists = .FALSE.                  !! existe el archivo de configuracion?
+    character(len=50):: label                   !! etiquetas del archivo de configuracion
+
+    character(len=50):: resultsFile,configFile
+    COMMON resultsFile,configFile
+
+    ! comprueba que se haya definido un archivo de configuracion y de que existe
+    if(configFile /= '') then
+        inquire(file=configFile,exist=exists)
+        if(.NOT.exists) then
+            write(*,*) 'No se ha encontrado el archivo de configuracion.'
+            write(*,*)
+        end if
+    end if
+
+    if(exists) then
+        open(unit=24,file=configFile,status='old',action='read')
+        read(24,*) label
+        read(24,*) label,r
+        read(24,*) label,s
+        close(24)
+
+        write(*,*) "Los datos de ",configFile," son:"
+        write(*,'(A,I4,I4,A)') "Número de iteraciones para el calculo analitico -> [r,s] = [",r,s,"]"
+    else
+        ! datos para el bucle de calculo de flecha
+        write(*,*) 'Número de iteraciones para el calculo analitico:'
+        write(*,'(A,$)') 'n (interger): '
+        read(*,*) r
+        write(*,'(A,$)') 'm (interger): '
+        read(*,*) s
+    end if
+
+
 
     !calculamos deltaX y deltaY
     deltaX = ancho / (n + 1)
@@ -436,7 +464,7 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
     ! ceros en w
     do i=1,n
         do j=1,m
-            w(i,j) = 0
+            w(j,i) = 0
         end do
     end do
     !bucle para cada x e y

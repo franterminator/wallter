@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,7 +10,7 @@
     <meta name="author" content="Franterminator" >
     <link rel="icon" href="../favicon.png">
 
-    <title>constructor &ndash; Fortran Program</title>
+    <title>resAnaliticos &ndash; Fortran Program</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -61,7 +60,7 @@
 		 aria-expanded="false">Contents <span class="caret"></span></a>
 	      <ul class="dropdown-menu">
               
-            <li><a href="../sourcefile/main.f95.html">Source File</a></li>
+            <li><a href="../lists/files.html">Source Files</a></li>
 				
 				
             
@@ -75,7 +74,7 @@
             </ul>
             </li>
 
-<li class="visible-xs hidden-sm visible-lg"><a href="../sourcefile/main.f95.html">Source File</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
 
 
 
@@ -105,11 +104,10 @@
     
   
   <div class="row">
-    <h1>constructor
-	 <small>Interface</small>
+    <h1>resAnaliticos
+      <small>Subroutine</small>
     
     </h1>
-    
     
 <div class="row">
   <div class="col-lg-12">
@@ -124,20 +122,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title=" 2.1% of total for procedures.">8 statements</a>
+	  title=" 8.4% of total for procedures.">37 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/main.f95"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/result.f95"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/main.f95.html'>main.f95</a></li>
+     <li><a href='../sourcefile/result.f95.html'>result.f95</a></li>
   
-     <li><a href='../program/wallter.html'>WALLTER</a></li>
-  
-     <li class="active">constructor</li>
+     <li class="active">resAnaliticos</li>
   </ol>
 </div>
 </div>
@@ -148,7 +144,6 @@
   })
 </script>
 
-    
   </div>
   
   <div class="row">
@@ -156,6 +151,19 @@
     
 <div id="sidebar">
   
+
+<div class="panel panel-primary">
+  <div class="panel-heading
+  text-left"><h3 class="panel-title"><a data-toggle="collapse"
+  href="#common-0">Common Blocks</a></h3></div>
+  <div id="common-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../proc/resanaliticos.html#common-__unnamed__%7E8"><em>unnamed</em></a>
+      
+    </div>
+  </div>
+</div>
 
 
 
@@ -191,19 +199,17 @@
       
       <a class="list-group-item" href="../proc/commandline.html">commandLine</a>
       
-      <a class="list-group-item" href="../proc/constructor.html">constructor</a>
+      <a class="list-group-item" href="../proc/constructmatriz.html">constructMatriz</a>
       
-      <a class="list-group-item" href="../interface/constructor.html">constructor</a>
+      <a class="list-group-item" href="../proc/constructvector.html">constructVector</a>
       
       <a class="list-group-item" href="../proc/createhtml.html">createHTML</a>
       
-      <a class="list-group-item" href="../proc/datosplaca.html">datosPlaca</a>
+      <a class="list-group-item" href="../proc/datos.html">datos</a>
       
       <a class="list-group-item" href="../proc/exportmaterial.html">exportMaterial</a>
       
       <a class="list-group-item" href="../proc/exportplaca.html">exportPlaca</a>
-      
-      <a class="list-group-item" href="../proc/exportresultados.html">exportResultados</a>
       
       <a class="list-group-item" href="../proc/fcholesky.html">fCholesky</a>
       
@@ -217,6 +223,10 @@
       
       <a class="list-group-item" href="../proc/printvector.html">printVector</a>
       
+      <a class="list-group-item" href="../proc/resanaliticos.html">resAnaliticos</a>
+      
+      <a class="list-group-item" href="../proc/resnumericos.html">resNumericos</a>
+      
     </div>
   </div>
 </div>
@@ -227,43 +237,144 @@
     </div>
     
     <div class="col-md-9" id='text'>
-	
-    
-    <h2>interface</h2>
-    <p>Interface para poder fijar las dimensiones de la matriz en la
- subroutine constructor</p>
+    <h2>
+subroutine resAnaliticos(ancho, largo, navier, n, m)
     
     
-    <h3>Called By</h3>
+	 
+</h2>
     
+  
+
+
+    
+    <p>Escribe la table de resultados analiticos en el html de resultados</p>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ancho%7E6"></span>real(kind=8),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ancho</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-largo%7E7"></span>real(kind=8),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>largo</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-navier"></span>real(kind=8),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(n,m)</td><td>::</td>
+  <td><strong>navier</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n%7E8"></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>n</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-m%7E8"></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>m</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+     
+     <h3>Called By</h3>
+     
                 <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.38.0 (20140413.2041)
  -->
-<!-- Title: interface~~constructor~~CalledByGraph Pages: 1 -->
-<svg id="interfaceconstructorCalledByGraph" width="172pt" height="32pt"
- viewBox="0.00 0.00 172.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="interface~~constructor~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
-<title>interface~~constructor~~CalledByGraph</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-28 168,-28 168,4 -4,4"/>
-<!-- interface~constructor -->
-<g id="interface~~constructor~~CalledByGraph_node1" class="node"><title>interface~constructor</title>
-<polygon fill="none" stroke="black" points="164,-24 98,-24 98,-0 164,-0 164,-24"/>
-<text text-anchor="middle" x="131" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">constructor</text>
+<!-- Title: proc~~resanaliticos~~CalledByGraph Pages: 1 -->
+<svg id="procresanaliticosCalledByGraph" width="179pt" height="32pt"
+ viewBox="0.00 0.00 179.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~resanaliticos~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~resanaliticos~~CalledByGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28 175,-28 175,4 -4,4"/>
+<!-- proc~resanaliticos -->
+<g id="proc~~resanaliticos~~CalledByGraph_node1" class="node"><title>proc~resanaliticos</title>
+<polygon fill="none" stroke="black" points="171,-24 98,-24 98,-0 171,-0 171,-24"/>
+<text text-anchor="middle" x="134.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">resAnaliticos</text>
 </g>
 <!-- program~wallter -->
-<g id="interface~~constructor~~CalledByGraph_node2" class="node"><title>program~wallter</title>
-<g id="a_interface~~constructor~~CalledByGraph_node2"><a xlink:href="../program/wallter.html" xlink:title="WALLTER">
+<g id="proc~~resanaliticos~~CalledByGraph_node2" class="node"><title>program~wallter</title>
+<g id="a_proc~~resanaliticos~~CalledByGraph_node2"><a xlink:href="../program/wallter.html" xlink:title="WALLTER">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="62,-24 0,-24 0,-0 62,-0 62,-24"/>
 <text text-anchor="middle" x="31" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">WALLTER</text>
 </a>
 </g>
 </g>
-<!-- program~wallter&#45;&gt;interface~constructor -->
-<g id="interface~~constructor~~CalledByGraph_edge1" class="edge"><title>program~wallter&#45;&gt;interface~constructor</title>
-<path fill="none" stroke="#000000" d="M62.2029,-12C70.1995,-12 78.9833,-12 87.5004,-12"/>
-<polygon fill="#000000" stroke="#000000" points="87.6863,-15.5001 97.6863,-12 87.6862,-8.5001 87.6863,-15.5001"/>
+<!-- program~wallter&#45;&gt;proc~resanaliticos -->
+<g id="proc~~resanaliticos~~CalledByGraph_edge1" class="edge"><title>program~wallter&#45;&gt;proc~resanaliticos</title>
+<path fill="none" stroke="#000000" d="M62.1785,-12C70.2428,-12 79.1412,-12 87.8382,-12"/>
+<polygon fill="#000000" stroke="#000000" points="87.8933,-15.5001 97.8933,-12 87.8932,-8.5001 87.8933,-15.5001"/>
 </g>
 </g>
 </svg>
@@ -335,26 +446,69 @@
                   </div>
                 </div>
                 
-    
-    <h2>
-subroutine constructor(matriz, f, navier, n, m)
-    
-    
-	 
-</h2>
-    
+     
+    <br>
 
-    
-  
-
-
-    <h3>Arguments</h3>
-    
+    <section class="visible-xs visible-sm hidden-md">
       
+
+<div class="panel panel-primary">
+  <div class="panel-heading
+  text-left"><h3 class="panel-title"><a data-toggle="collapse"
+  href="#common-1">Common Blocks</a></h3></div>
+  <div id="common-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../proc/resanaliticos.html#common-__unnamed__%7E8"><em>unnamed</em></a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+    <section>
+      <h2>Common Blocks</h2>
+      
+      
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="common-__unnamed__%7E8"></span><h3>
+      <a data-toggle="popover" data-html="true" tabindex="0" 
+	   data-trigger="focus"
+	 data-content="<h4>Used Elsewhere:</h4><a href='../proc/commandline.html#common-__unnamed__'>commandLine</a> (subroutine)<br><a href='../proc/datos.html#common-__unnamed__%7E2'>datos</a> (subroutine)<br><a href='../proc/analiticanavier.html#common-__unnamed__%7E3'>analiticaNavier</a> (subroutine)<br><a href='../proc/createhtml.html#common-__unnamed__%7E4'>createHTML</a> (subroutine)<br><a href='../proc/exportmaterial.html#common-__unnamed__%7E5'>exportMaterial</a> (subroutine)<br><a href='../proc/exportplaca.html#common-__unnamed__%7E6'>exportPlaca</a> (subroutine)<br><a href='../proc/resnumericos.html#common-__unnamed__%7E7'>resNumericos</a> (subroutine)<br><a href='../program/wallter.html#common-__unnamed__%7E9'>WALLTER</a> (program)<br>">common</a>
+      
+  </h3></div>
+  <div class="panel-body">
+    
+    
+    
+    
 <table class="table table-striped varlist">
 <thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
 
 
 
@@ -366,57 +520,11 @@ subroutine constructor(matriz, f, navier, n, m)
   
 <tr>
   
-  <td><span class="anchor" id="variable-matriz%7E5"></span>real(kind=8),</td>
-  <td>intent(inout),</td>
-  <td></td>
+  <td><span class="anchor" id="variable-resultsfile%7E8"></span>real</td>
   
-  <td>dimension(:,:), allocatable</td><td>::</td>
-  <td><strong>matriz</strong></td><td><p>sistema de ecuaciones</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-f%7E4"></span>real(kind=8),</td>
-  <td>intent(inout),</td>
-  <td></td>
-  
-  <td>dimension(:), allocatable</td><td>::</td>
-  <td><strong>f</strong></td><td><p>vector terminos independientes</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-navier%7E2"></span>real(kind=8),</td>
-  <td>intent(inout),</td>
-  <td></td>
-  
-  <td>dimension(:,:), allocatable</td><td>::</td>
-  <td><strong>navier</strong></td><td><p>resultados analiticos</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-n%7E7"></span>integer,</td>
-  <td>intent(out)</td>
-  <td></td>
   
   <td></td><td>::</td>
-  <td><strong>n</strong></td><td></td>
+  <td><strong>resultsFile</strong></td><td></td><td></td><td></td>
   
 </tr>
 
@@ -426,12 +534,11 @@ subroutine constructor(matriz, f, navier, n, m)
   
 <tr>
   
-  <td><span class="anchor" id="variable-m%7E7"></span>integer,</td>
-  <td>intent(out)</td>
-  <td></td>
+  <td><span class="anchor" id="variable-configfile%7E8"></span>real</td>
+  
   
   <td></td><td>::</td>
-  <td><strong>m</strong></td><td></td>
+  <td><strong>configFile</strong></td><td></td><td></td><td></td>
   
 </tr>
 
@@ -439,12 +546,38 @@ subroutine constructor(matriz, f, navier, n, m)
 </table>
 
     
-    
-    
-    <br>
-
- </div>
 </div>
+</div>
+
+      
+    </section>
+    <br>
+    <script>
+      $(function () {
+      $('[data-toggle="popover"]').popover()
+      })
+    </script>
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    
+    </div>
+  </div>
 
   <section class="visible-xs visible-sm hidden-md">
     <hr>
@@ -461,19 +594,17 @@ subroutine constructor(matriz, f, navier, n, m)
       
       <a class="list-group-item" href="../proc/commandline.html">commandLine</a>
       
-      <a class="list-group-item" href="../proc/constructor.html">constructor</a>
+      <a class="list-group-item" href="../proc/constructmatriz.html">constructMatriz</a>
       
-      <a class="list-group-item" href="../interface/constructor.html">constructor</a>
+      <a class="list-group-item" href="../proc/constructvector.html">constructVector</a>
       
       <a class="list-group-item" href="../proc/createhtml.html">createHTML</a>
       
-      <a class="list-group-item" href="../proc/datosplaca.html">datosPlaca</a>
+      <a class="list-group-item" href="../proc/datos.html">datos</a>
       
       <a class="list-group-item" href="../proc/exportmaterial.html">exportMaterial</a>
       
       <a class="list-group-item" href="../proc/exportplaca.html">exportPlaca</a>
-      
-      <a class="list-group-item" href="../proc/exportresultados.html">exportResultados</a>
       
       <a class="list-group-item" href="../proc/fcholesky.html">fCholesky</a>
       
@@ -486,6 +617,10 @@ subroutine constructor(matriz, f, navier, n, m)
       <a class="list-group-item" href="../proc/printmatrix.html">printMatrix</a>
       
       <a class="list-group-item" href="../proc/printvector.html">printVector</a>
+      
+      <a class="list-group-item" href="../proc/resanaliticos.html">resAnaliticos</a>
+      
+      <a class="list-group-item" href="../proc/resnumericos.html">resNumericos</a>
       
     </div>
   </div>

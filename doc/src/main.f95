@@ -3,40 +3,38 @@
 !  en sus cantos con carga hidraulica hasta la mitad de su largo
 Program WALLTER
 
-    !< Interface para poder fijar las dimensiones de la matriz en la
-    ! subroutine constructor
-    interface
-        subroutine constructor(matriz,f,navier,n,m)
-            real*8,dimension(:,:),allocatable,intent(inout):: matriz    !! sistema de ecuaciones
-            real*8,dimension(:),allocatable,intent(inout):: f           !! vector terminos independientes
-            real*8,dimension(:,:),allocatable,intent(inout):: navier    !! resultados analiticos
-            integer,intent(out):: n,m
-        end subroutine
-    end interface
-
     real*8, dimension(:,:),allocatable:: matriz !! sistema de ecuaciones
     real*8, dimension(:),allocatable:: f        !! vector terminos independientes
-    real*8,dimension(:,:),allocatable:: navier
-    integer:: n, m                              !! numero de puntos para discretizar largo(n) y ancho(m)
+    real*8,dimension(:,:),allocatable:: navier  !! vector terminos analiticos
 
     real*8, dimension(:,:),allocatable:: fMatriz!! solucion en forma matricial
     integer,dimension(2):: forma                !! forma de la matriz solucion
     integer,dimension(2):: orden = (/2,1/)      !! orden de los numeros al cambiar vector a matriz solucion
 
-    character(len=50):: resultsFile = './result/resultados.html'
-    character(len=50):: configFile = ''
+    character(len=50):: resultsFile = './result/resultados.html'    !! directorio donde se escribiran los resultados
+    character(len=50):: configFile = ''                             !! directorio donde se encuentran los config file
     logical:: asserts = .FALSE.                 !! si se activa se imprimen los datos de la factorizacion
-    logical:: exists
+    logical:: exists                            !! comprueba la existencia de los directorios de resultados
 
-    COMMON resultsFile,configFile
+    real*8:: ancho,largo,espesor                !! dimensiones de la placa
+    real*8:: rigidez                            !! rigidez a flexion de la placa
+    integer:: n, m                              !! numero de puntos para discretizar largo(n) y ancho(m)
 
+    COMMON resultsFile,configFile               !! variables globales
+
+    ! comprueba si existe el directorio de resultados
     inquire(file=resultsFile,exist=exists)
-    if(.NOT.exists) resultsFile = 'result.html'
+    if(.NOT.exists) resultsFile = 'result.html' ! si no existe crea el archivo al lado del programa
 
     ! inicio del programa
-    call commandLine(asserts)       ! opciones de ejecucion
-    call bienvenido()               ! mensaje de bienvenida (header)
-    call constructor(matriz,f,navier,n,m)  ! calculo de las matrices
+    call commandLine(asserts)                   ! opciones de ejecucion
+    call bienvenido()                           ! mensaje de bienvenida (header)
+    call datos(ancho,largo,espesor,rigidez,n,m) ! datos para poder funcionar el programa
+
+    allocate(matriz(n*m,n*m))                   ! fija la matriz de resultados numericos
+    call constructMatriz(ancho,largo,matriz,n,m)! construye la matriz para los resultados numericos
+    allocate(f(n*m))                            ! fija el vector de resultados numericos
+    call constructVector(largo,rigidez,f,n,m)   ! construye el vector para los resultados numericos
 
     ! muestra la matriz y factorizacion
     if (asserts) then
@@ -48,35 +46,31 @@ Program WALLTER
         call printMatrix(matriz ,'Matriz (factorizada)')
 
         ! resolucion del sistema
-        call linearSystem(matriz,f,n,m)     ! resuelve
-        call linearSystem(matriz,f,n,m)     ! resuelve
-
-        ! cambio de vector a matriz solucion
-        allocate(fMatriz(n,m))
-        forma(1) = n
-        forma(2) = m
-        fMatriz = reshape(f,forma,order=orden)
-        call printMatrix(fMatriz, 'Vector solucion')
-
-        call exportResultados(fMatriz,n,m)
+        call linearSystem(matriz,f,n,m)
+        call linearSystem(matriz,f,n,m)
 
     ! muestra solo la solucion
     else
+
         ! factoriza y resuelve
         call fCholesky(matriz,n,m)
         call linearSystem(matriz,f,n,m)
         call linearSystem(matriz,f,n,m)
-
-        ! cambio de vector a matriz solucion
-        allocate(fMatriz(n,m))
-        forma(1) = n
-        forma(2) = m
-        fMatriz = reshape(f,forma,order=orden)
-        call printMatrix(fMatriz, 'Vector solucion')
-
-        call exportResultados(fMatriz,n,m)
-
     end if
+
+    ! cambio de vector a matriz solucion
+    allocate(fMatriz(m,n))
+    forma(1) = n
+    forma(2) = m
+    fMatriz = reshape(f,forma,order=orden)
+    call printMatrix(fMatriz, 'Vector solucion')
+    call resNumericos(ancho,largo,fMatriz,n,m)
+
+    ! calcula los resultados analiticos por Navier
+    allocate(navier(m,n))
+    call analiticaNavier(navier,ancho,largo,rigidez,n,m)
+    call resAnaliticos(ancho,largo,navier,n,m)
+
     ! para que no se cierre el programa derepente
     write(*,*) "Gracias por usar el programa..."
     read(*,*)
@@ -197,7 +191,7 @@ subroutine bienvenido()
 end subroutine
 
 !< Solicita los datos necesarios para el calculo de la flecha.
-subroutine datosPlaca(ancho,largo,espesor,rigidez,n,m)
+subroutine datos(ancho,largo,espesor,rigidez,n,m)
     integer*4,intent(out):: n,m                 !! numero de puntos para discretizar la placa
     real*8,intent(out):: largo, ancho, espesor  !! dimensiones de la placa
     real*8,intent(out):: rigidez                !! rigidez a flexion -> D = E*t^3/(12(1-v^2))
@@ -293,25 +287,15 @@ subroutine datosPlaca(ancho,largo,espesor,rigidez,n,m)
     call exportPlaca(largo,ancho,espesor)
 end subroutine
 
-!< Calculo los terminos de la matriz y el vector de terminso independientes y
+!< Calculo los terminos de la matriz de resultados numericos y
 !  los coloca en su sitio. La matriz se almacena en banda.
-subroutine constructor(matriz,f,navier,n,m)
-    real*8,dimension(:,:),allocatable,intent(inout):: matriz
-    real*8,dimension(:),allocatable,intent(inout):: f
-    real*8,dimension(:,:),allocatable,intent(inout):: navier
-    integer,intent(out):: n,m
+subroutine constructMatriz(ancho,largo,matriz,n,m)
+    real*8,dimension(n*m,n*m),intent(inout):: matriz
+    real*8,intent(in):: ancho,largo
+    integer,intent(in):: n,m
 
-    real*8:: ancho,largo,espesor,A,B,C,deltaX,deltaY
-    real*8:: rigidez,presion
+    real*8:: A,B,C,deltaX,deltaY
     integer:: i,j
-
-    character(len=50):: resultsFile,configFile
-    COMMON resultsFile,configFile
-
-    call datosPlaca(ancho,largo,espesor,rigidez,n,m)
-
-    allocate(navier(n,m))
-    call analiticaNavier(navier,ancho,largo,rigidez,n,m)
 
     ! calculo de los coef A, B y C
     deltaX = ancho / (n + 1)
@@ -322,9 +306,7 @@ subroutine constructor(matriz,f,navier,n,m)
     write(*,'(A,3(f0.2,X),A)') "[A,B,C] -> [ ",A,B,C,"]"
 
     !matriz y vector a cero
-    allocate(matriz(n*m,n*m),f(n*m))
     do i=1,n*m
-        f(i) = 0
         do j=1,n*m
             matriz(i,j) = 0
         end do
@@ -340,6 +322,22 @@ subroutine constructor(matriz,f,navier,n,m)
         end if
         if(i+n <= n*m) matriz(i,n+1) = C
     end do
+end subroutine
+
+!< Construye el vector de resultados numericos
+subroutine constructVector(largo,rigidez,vector,n,m)
+    real*8,dimension(n*m),intent(inout):: vector
+    real*8,intent(in):: largo,rigidez
+    integer,intent(in):: n,m
+
+    real*8:: deltaY,presion
+
+    ! vector a cero
+    do i=1,n*m
+        vector(i) = 0
+    end do
+
+    deltaY = largo / (m + 1)
 
     ! construccion vector
     j = 1
@@ -349,9 +347,9 @@ subroutine constructor(matriz,f,navier,n,m)
 
         !solo hasta la mitad
         if (presion < 0) then
-            f(i) = 0
+            vector(i) = 0
         else
-            f(i) = presion
+            vector(i) = presion
         end if
 
         ! las filas tienen la misma presion
@@ -415,24 +413,53 @@ subroutine linearSystem (matriz, f, n, m)
     end do
 end subroutine
 
+!< Resolucion del sistema mediante el metodo de Navier
 subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
     real*8,intent(in):: ancho,largo
     real*8,intent(in):: rigidez
-    real*8,dimension(n,m),intent(out):: w
+    real*8,dimension(m,n),intent(out):: w
     integer,intent(in):: n, m
 
-    integer:: i, j, p, q
+    integer:: i, j, r, s
     integer:: k, u
     real*8:: deltaX, deltaY, X, Y
-    real*8:: p_ij, w_ij
+    real*8:: p_ku, w_ku
     real*8:: pi = acos(-1.0d0)
 
-    ! datos para el bucle de calculo de flecha
-    write(*,*) 'Número de iteraciones para el calculo analitico:'
-    write(*,'(A,$)') 'n (interger):'
-    read(*,*) r
-    write(*,'(A,$)') 'm (interger):'
-    read(*,*) s
+    logical:: exists = .FALSE.                  !! existe el archivo de configuracion?
+    character(len=50):: label                   !! etiquetas del archivo de configuracion
+
+    character(len=50):: resultsFile,configFile
+    COMMON resultsFile,configFile
+
+    ! comprueba que se haya definido un archivo de configuracion y de que existe
+    if(configFile /= '') then
+        inquire(file=configFile,exist=exists)
+        if(.NOT.exists) then
+            write(*,*) 'No se ha encontrado el archivo de configuracion.'
+            write(*,*)
+        end if
+    end if
+
+    if(exists) then
+        open(unit=24,file=configFile,status='old',action='read')
+        read(24,*) label
+        read(24,*) label,r
+        read(24,*) label,s
+        close(24)
+
+        write(*,*) "Los datos de ",configFile," son:"
+        write(*,'(A,I4,I4,A)') "Número de iteraciones para el calculo analitico -> [r,s] = [",r,s,"]"
+    else
+        ! datos para el bucle de calculo de flecha
+        write(*,*) 'Número de iteraciones para el calculo analitico:'
+        write(*,'(A,$)') 'n (interger): '
+        read(*,*) r
+        write(*,'(A,$)') 'm (interger): '
+        read(*,*) s
+    end if
+
+
 
     !calculamos deltaX y deltaY
     deltaX = ancho / (n + 1)
@@ -441,7 +468,7 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
     ! ceros en w
     do i=1,n
         do j=1,m
-            w(i,j) = 0
+            w(j,i) = 0
         end do
     end do
     !bucle para cada x e y
@@ -459,7 +486,7 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
                     w_ku = w_ku**2
                     w_ku = p_ku / (pi**4 * rigidez * w_ku)
 
-                    w(i,j) = w(i,j) + w_ku * sin(k*pi*X/ancho) * sin(u*pi*Y/largo)
+                    w(j,i) = w(j,i) + w_ku * sin(k*pi*X/ancho) * sin(u*pi*Y/largo)
                 end do
             end do
         end do
@@ -471,89 +498,3 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
 
 end subroutine
 
-subroutine createHTML(name)
-    character(len=*),intent(in):: name
-
-    character(len=50):: resultsFile,configFile
-    COMMON resultsFile,configFile
-
-
-    open(unit=12,file=resultsFile)
-    write(12,*) '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'
-    write(12,*) '<head>'
-	write(12,*) '<title>',name,'</title>'
-	write(12,*) '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />'
-	write(12,*) '<meta name="description" content="" />'
-	write(12,*) '<meta name="keywords" content="" />'
-	write(12,*) '<meta name="robots" content="index,follow" />'
-	write(12,*) '<link rel="stylesheet" type="text/css" href="./css/style.css" />'
-    write(12,*) '</head>'
-    write(12,*) '<body>'
-    write(12,*) '<div class="row">'
-    write(12,*) '<div class="header">'
-    write(12,*) '<h1> Resultados del programa </h1>'
-    write(12,*) '</div>'
-	write(12,*) '</div>'
-	close(12)
-end subroutine
-
-subroutine exportMaterial(Young,poisson)
-    real*8,intent(in):: Young,poisson
-    character(len=50):: resultsFile,configFile
-    COMMON resultsFile,configFile
-
-    open(unit=12,file=resultsFile,status='old',position="append")
-    write(12,*) '<div class="row">'
-    write(12,*) '<div class="box-item">'
-    write(12,*) '<header> Material </header>'
-    write(12,*) '<p> El material empleado es : 	</p>'
-    write(12,*) '<table>'
-    write(12,*) '<tr><td>E = ',Young,'MPa</td></tr>'
-    write(12,*) '<tr><td>v = ',poisson,'</td></tr>'
-    write(12,*) '</table>'
-    close(12)
-end subroutine
-
-subroutine exportPlaca(largo,ancho,espesor)
-    real*8,intent(in):: largo,ancho,espesor
-    character(len=50):: resultsFile,configFile
-    COMMON resultsFile,configFile
-
-    open(unit=12,file=resultsFile,status='old',position="append")
-    write(12,*) '<header> Placa </header>'
-    write(12,*) '<p>Las medidas de la placa son:</p>'
-    write(12,*) '<table>'
-    write(12,*) '<tr><td>Largo = ',largo,' m</td></tr>'
-    write(12,*) '<tr><td>Ancho = ',ancho,' m</td></tr>'
-    write(12,*) '<tr><td>Espesor = ',espesor,' m</td></tr>'
-    write(12,*) '</table>'
-    write(12,*) '</div>'
-    close(12)
-end subroutine
-
-subroutine exportResultados(fMatriz,n,m)
-    real*8,dimension(n,m),intent(in):: fMatriz
-    integer,intent(in):: n,m
-    character(len=50):: resultsFile,configFile
-    COMMON resultsFile,configFile
-
-    open(unit=12,file=resultsFile,status='old',position="append")
-    write(12,*) '<div class="box-item" id="resultados">'
-    write(12,*) '<header id="azul"> Resultados </header>'
-    write(12,*) '<table>'
-
-    write(12,*) '<th rowspan="',m+2,'"> Y </th>'
-    write(12,*) '<th colspan="',n,'"> X </th>'
-    write(12,*) '<tr class="tr-header">'
-    write(12,*) ('<td>',2*j,'</td>',j=1,m)
-    write(12,*) '</tr>'
-
-    do i=1,n
-        write(12,*) '<tr>'
-        write(12,'(*(A,f0.4,5x,A))') ('<td>',fMatriz(i,j),'</td>',j=1,m)
-        write(12,*) '</tr>'
-    end do
-
-    write(12,*)'</table>'
-    close(12)
-end subroutine

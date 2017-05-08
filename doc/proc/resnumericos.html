@@ -10,7 +10,7 @@
     <meta name="author" content="Franterminator" >
     <link rel="icon" href="../favicon.png">
 
-    <title>datosPlaca &ndash; Fortran Program</title>
+    <title>resNumericos &ndash; Fortran Program</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
@@ -60,7 +60,7 @@
 		 aria-expanded="false">Contents <span class="caret"></span></a>
 	      <ul class="dropdown-menu">
               
-            <li><a href="../sourcefile/main.f95.html">Source File</a></li>
+            <li><a href="../lists/files.html">Source Files</a></li>
 				
 				
             
@@ -74,7 +74,7 @@
             </ul>
             </li>
 
-<li class="visible-xs hidden-sm visible-lg"><a href="../sourcefile/main.f95.html">Source File</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
 
 
 
@@ -104,7 +104,7 @@
     
   
   <div class="row">
-    <h1>datosPlaca
+    <h1>resNumericos
       <small>Subroutine</small>
     
     </h1>
@@ -122,18 +122,18 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title="19.5% of total for procedures.">73 statements</a>
+	  title=" 7.2% of total for procedures.">32 statements</a>
      </li> 
      
      
-    <li><i class="fa fa-code"></i><a href="../src/main.f95"> Source File</a></li>
+    <li><i class="fa fa-code"></i><a href="../src/result.f95"> Source File</a></li>
      
   </ul>
   <ol class="breadcrumb in-well text-right">
   
-     <li><a href='../sourcefile/main.f95.html'>main.f95</a></li>
+     <li><a href='../sourcefile/result.f95.html'>result.f95</a></li>
   
-     <li class="active">datosPlaca</li>
+     <li class="active">resNumericos</li>
   </ol>
 </div>
 </div>
@@ -159,7 +159,7 @@
   <div id="common-0" class="panel-collapse collapse">
     <div class="list-group">
       
-      <a class="list-group-item" href="../proc/datosplaca.html#common-__unnamed__%7E2"><em>unnamed</em></a>
+      <a class="list-group-item" href="../proc/resnumericos.html#common-__unnamed__%7E7"><em>unnamed</em></a>
       
     </div>
   </div>
@@ -199,19 +199,17 @@
       
       <a class="list-group-item" href="../proc/commandline.html">commandLine</a>
       
-      <a class="list-group-item" href="../proc/constructor.html">constructor</a>
+      <a class="list-group-item" href="../proc/constructmatriz.html">constructMatriz</a>
       
-      <a class="list-group-item" href="../interface/constructor.html">constructor</a>
+      <a class="list-group-item" href="../proc/constructvector.html">constructVector</a>
       
       <a class="list-group-item" href="../proc/createhtml.html">createHTML</a>
       
-      <a class="list-group-item" href="../proc/datosplaca.html">datosPlaca</a>
+      <a class="list-group-item" href="../proc/datos.html">datos</a>
       
       <a class="list-group-item" href="../proc/exportmaterial.html">exportMaterial</a>
       
       <a class="list-group-item" href="../proc/exportplaca.html">exportPlaca</a>
-      
-      <a class="list-group-item" href="../proc/exportresultados.html">exportResultados</a>
       
       <a class="list-group-item" href="../proc/fcholesky.html">fCholesky</a>
       
@@ -225,6 +223,10 @@
       
       <a class="list-group-item" href="../proc/printvector.html">printVector</a>
       
+      <a class="list-group-item" href="../proc/resanaliticos.html">resAnaliticos</a>
+      
+      <a class="list-group-item" href="../proc/resnumericos.html">resNumericos</a>
+      
     </div>
   </div>
 </div>
@@ -236,7 +238,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
+subroutine resNumericos(ancho, largo, fMatriz, n, m)
     
     
 	 
@@ -246,7 +248,7 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
 
 
     
-    <p>Solicita los datos necesarios para el calculo de la flecha.</p>
+    <p>Escribe la table de resultados numericos en el html de resultados</p>
     
 
     <h3>Arguments</h3>
@@ -267,12 +269,12 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
   
 <tr>
   
-  <td><span class="anchor" id="variable-ancho"></span>real(kind=8),</td>
-  <td>intent(out)</td>
+  <td><span class="anchor" id="variable-ancho%7E5"></span>real(kind=8),</td>
+  <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>ancho</strong></td><td><p>dimensiones de la placa</p></td>
+  <td><strong>ancho</strong></td><td></td>
   
 </tr>
 
@@ -282,12 +284,12 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
   
 <tr>
   
-  <td><span class="anchor" id="variable-largo"></span>real(kind=8),</td>
-  <td>intent(out)</td>
+  <td><span class="anchor" id="variable-largo%7E6"></span>real(kind=8),</td>
+  <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>largo</strong></td><td><p>dimensiones de la placa</p></td>
+  <td><strong>largo</strong></td><td></td>
   
 </tr>
 
@@ -297,12 +299,12 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
   
 <tr>
   
-  <td><span class="anchor" id="variable-espesor"></span>real(kind=8),</td>
-  <td>intent(out)</td>
+  <td><span class="anchor" id="variable-fmatriz"></span>real(kind=8),</td>
+  <td>intent(in),</td>
   <td></td>
   
-  <td></td><td>::</td>
-  <td><strong>espesor</strong></td><td><p>dimensiones de la placa</p></td>
+  <td>dimension(n,m)</td><td>::</td>
+  <td><strong>fMatriz</strong></td><td></td>
   
 </tr>
 
@@ -312,12 +314,12 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
   
 <tr>
   
-  <td><span class="anchor" id="variable-rigidez"></span>real(kind=8),</td>
-  <td>intent(out)</td>
+  <td><span class="anchor" id="variable-n%7E7"></span>integer,</td>
+  <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>rigidez</strong></td><td><p>rigidez a flexion -&gt; D = E*t^3/(12(1-v^2))</p></td>
+  <td><strong>n</strong></td><td></td>
   
 </tr>
 
@@ -327,27 +329,12 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
   
 <tr>
   
-  <td><span class="anchor" id="variable-n"></span>integer(kind=4),</td>
-  <td>intent(out)</td>
+  <td><span class="anchor" id="variable-m%7E7"></span>integer,</td>
+  <td>intent(in)</td>
   <td></td>
   
   <td></td><td>::</td>
-  <td><strong>n</strong></td><td><p>numero de puntos para discretizar la placa</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-m"></span>integer(kind=4),</td>
-  <td>intent(out)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>m</strong></td><td><p>numero de puntos para discretizar la placa</p></td>
+  <td><strong>m</strong></td><td></td>
   
 </tr>
 
@@ -357,134 +344,6 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
     
     
     
-     <h3>Calls</h3>
-     
-                <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
- "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.38.0 (20140413.2041)
- -->
-<!-- Title: proc~~datosplaca~~CallsGraph Pages: 1 -->
-<svg id="procdatosplacaCallsGraph" width="188pt" height="116pt"
- viewBox="0.00 0.00 188.00 116.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="proc~~datosplaca~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
-<title>proc~~datosplaca~~CallsGraph</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-112 184,-112 184,4 -4,4"/>
-<!-- proc~datosplaca -->
-<g id="proc~~datosplaca~~CallsGraph_node1" class="node"><title>proc~datosplaca</title>
-<polygon fill="none" stroke="black" points="65,-66 0,-66 0,-42 65,-42 65,-66"/>
-<text text-anchor="middle" x="32.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50">datosPlaca</text>
-</g>
-<!-- proc~createhtml -->
-<g id="proc~~datosplaca~~CallsGraph_node2" class="node"><title>proc~createhtml</title>
-<g id="a_proc~~datosplaca~~CallsGraph_node2"><a xlink:href="../proc/createhtml.html" xlink:title="createHTML">
-<polygon fill="#d9534f" stroke="#d9534f" points="175.5,-108 105.5,-108 105.5,-84 175.5,-84 175.5,-108"/>
-<text text-anchor="middle" x="140.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">createHTML</text>
-</a>
-</g>
-</g>
-<!-- proc~datosplaca&#45;&gt;proc~createhtml -->
-<g id="proc~~datosplaca~~CallsGraph_edge1" class="edge"><title>proc~datosplaca&#45;&gt;proc~createhtml</title>
-<path fill="none" stroke="#000000" d="M63.8753,-66.0355C74.9637,-70.429 87.6787,-75.467 99.4789,-80.1426"/>
-<polygon fill="#000000" stroke="#000000" points="98.5341,-83.5329 109.12,-83.9627 101.113,-77.0251 98.5341,-83.5329"/>
-</g>
-<!-- proc~exportmaterial -->
-<g id="proc~~datosplaca~~CallsGraph_node3" class="node"><title>proc~exportmaterial</title>
-<g id="a_proc~~datosplaca~~CallsGraph_node3"><a xlink:href="../proc/exportmaterial.html" xlink:title="exportMaterial">
-<polygon fill="#d9534f" stroke="#d9534f" points="180,-66 101,-66 101,-42 180,-42 180,-66"/>
-<text text-anchor="middle" x="140.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exportMaterial</text>
-</a>
-</g>
-</g>
-<!-- proc~datosplaca&#45;&gt;proc~exportmaterial -->
-<g id="proc~~datosplaca~~CallsGraph_edge2" class="edge"><title>proc~datosplaca&#45;&gt;proc~exportmaterial</title>
-<path fill="none" stroke="#000000" d="M65.0165,-54C73.0873,-54 81.9583,-54 90.6775,-54"/>
-<polygon fill="#000000" stroke="#000000" points="90.7863,-57.5001 100.786,-54 90.7863,-50.5001 90.7863,-57.5001"/>
-</g>
-<!-- proc~exportplaca -->
-<g id="proc~~datosplaca~~CallsGraph_node4" class="node"><title>proc~exportplaca</title>
-<g id="a_proc~~datosplaca~~CallsGraph_node4"><a xlink:href="../proc/exportplaca.html" xlink:title="exportPlaca">
-<polygon fill="#d9534f" stroke="#d9534f" points="174.5,-24 106.5,-24 106.5,-0 174.5,-0 174.5,-24"/>
-<text text-anchor="middle" x="140.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exportPlaca</text>
-</a>
-</g>
-</g>
-<!-- proc~datosplaca&#45;&gt;proc~exportplaca -->
-<g id="proc~~datosplaca~~CallsGraph_edge3" class="edge"><title>proc~datosplaca&#45;&gt;proc~exportplaca</title>
-<path fill="none" stroke="#000000" d="M63.8753,-41.9645C74.9637,-37.571 87.6787,-32.533 99.4789,-27.8574"/>
-<polygon fill="#000000" stroke="#000000" points="101.113,-30.9749 109.12,-24.0373 98.5341,-24.4671 101.113,-30.9749"/>
-</g>
-</g>
-</svg>
-</div>
-                <div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div>
-                <div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog">
-                  <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
-                      </div>
-                      <div class="modal-body">
-                        
-    <p>Nodes of different colours represent the following: </p>
-    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
- "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.38.0 (20140413.2041)
- -->
-<!-- Title: Graph Key Pages: 1 -->
-<svg width="558pt" height="32pt"
- viewBox="0.00 0.00 557.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
-<title>Graph Key</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-28 553.5,-28 553.5,4 -4,4"/>
-<!-- Subroutine -->
-<g id="node1" class="node"><title>Subroutine</title>
-<polygon fill="#d9534f" stroke="#d9534f" points="64,-24 0,-24 0,-0 64,-0 64,-24"/>
-<text text-anchor="middle" x="32" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
-</g>
-<!-- Function -->
-<g id="node2" class="node"><title>Function</title>
-<polygon fill="#d94e8f" stroke="#d94e8f" points="136,-24 82,-24 82,-0 136,-0 136,-24"/>
-<text text-anchor="middle" x="109" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
-</g>
-<!-- Interface -->
-<g id="node3" class="node"><title>Interface</title>
-<polygon fill="#a7506f" stroke="#a7506f" points="208,-24 154,-24 154,-0 208,-0 208,-24"/>
-<text text-anchor="middle" x="181" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
-</g>
-<!-- Unknown Procedure Type -->
-<g id="node4" class="node"><title>Unknown Procedure Type</title>
-<polygon fill="#777777" stroke="#777777" points="361.5,-24 226.5,-24 226.5,-0 361.5,-0 361.5,-24"/>
-<text text-anchor="middle" x="294" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
-</g>
-<!-- Program -->
-<g id="node5" class="node"><title>Program</title>
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="434,-24 380,-24 380,-0 434,-0 434,-24"/>
-<text text-anchor="middle" x="407" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
-</g>
-<!-- This Page&#39;s Entity -->
-<g id="node6" class="node"><title>This Page&#39;s Entity</title>
-<polygon fill="none" stroke="black" points="549.5,-24 452.5,-24 452.5,-0 549.5,-0 549.5,-24"/>
-<text text-anchor="middle" x="501" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
-</g>
-</g>
-</svg>
-
-    
-    <p>Solid arrows point from a procedure to one which it calls. Dashed 
-    arrows point from an interface to procedures which implement that interface.
-    This could include the module procedures in a generic interface or the
-    implementation in a submodule of an interface in a parent module.
-    </p>
-    
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-     
      
      <h3>Called By</h3>
      
@@ -493,29 +352,29 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 2.38.0 (20140413.2041)
  -->
-<!-- Title: proc~~datosplaca~~CalledByGraph Pages: 1 -->
-<svg id="procdatosplacaCalledByGraph" width="175pt" height="32pt"
- viewBox="0.00 0.00 175.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="proc~~datosplaca~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
-<title>proc~~datosplaca~~CalledByGraph</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-28 171,-28 171,4 -4,4"/>
-<!-- proc~datosplaca -->
-<g id="proc~~datosplaca~~CalledByGraph_node1" class="node"><title>proc~datosplaca</title>
-<polygon fill="none" stroke="black" points="167,-24 102,-24 102,-0 167,-0 167,-24"/>
-<text text-anchor="middle" x="134.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">datosPlaca</text>
+<!-- Title: proc~~resnumericos~~CalledByGraph Pages: 1 -->
+<svg id="procresnumericosCalledByGraph" width="183pt" height="32pt"
+ viewBox="0.00 0.00 183.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~resnumericos~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~resnumericos~~CalledByGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28 179,-28 179,4 -4,4"/>
+<!-- proc~resnumericos -->
+<g id="proc~~resnumericos~~CalledByGraph_node1" class="node"><title>proc~resnumericos</title>
+<polygon fill="none" stroke="black" points="175,-24 98,-24 98,-0 175,-0 175,-24"/>
+<text text-anchor="middle" x="136.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">resNumericos</text>
 </g>
-<!-- proc~constructor -->
-<g id="proc~~datosplaca~~CalledByGraph_node2" class="node"><title>proc~constructor</title>
-<g id="a_proc~~datosplaca~~CalledByGraph_node2"><a xlink:href="../proc/constructor.html" xlink:title="constructor">
-<polygon fill="#d9534f" stroke="#d9534f" points="66,-24 0,-24 0,-0 66,-0 66,-24"/>
-<text text-anchor="middle" x="33" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">constructor</text>
+<!-- program~wallter -->
+<g id="proc~~resnumericos~~CalledByGraph_node2" class="node"><title>program~wallter</title>
+<g id="a_proc~~resnumericos~~CalledByGraph_node2"><a xlink:href="../program/wallter.html" xlink:title="WALLTER">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="62,-24 0,-24 0,-0 62,-0 62,-24"/>
+<text text-anchor="middle" x="31" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">WALLTER</text>
 </a>
 </g>
 </g>
-<!-- proc~constructor&#45;&gt;proc~datosplaca -->
-<g id="proc~~datosplaca~~CalledByGraph_edge1" class="edge"><title>proc~constructor&#45;&gt;proc~datosplaca</title>
-<path fill="none" stroke="#000000" d="M66.0301,-12C74.1887,-12 83.0785,-12 91.6476,-12"/>
-<polygon fill="#000000" stroke="#000000" points="91.8702,-15.5001 101.87,-12 91.8701,-8.5001 91.8702,-15.5001"/>
+<!-- program~wallter&#45;&gt;proc~resnumericos -->
+<g id="proc~~resnumericos~~CalledByGraph_edge1" class="edge"><title>program~wallter&#45;&gt;proc~resnumericos</title>
+<path fill="none" stroke="#000000" d="M62.2147,-12C70.1914,-12 78.999,-12 87.6597,-12"/>
+<polygon fill="#000000" stroke="#000000" points="87.7005,-15.5001 97.7005,-12 87.7005,-8.5001 87.7005,-15.5001"/>
 </g>
 </g>
 </svg>
@@ -600,7 +459,7 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
   <div id="common-1" class="panel-collapse collapse">
     <div class="list-group">
       
-      <a class="list-group-item" href="../proc/datosplaca.html#common-__unnamed__%7E2"><em>unnamed</em></a>
+      <a class="list-group-item" href="../proc/resnumericos.html#common-__unnamed__%7E7"><em>unnamed</em></a>
       
     </div>
   </div>
@@ -635,10 +494,10 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
       
       
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="common-__unnamed__%7E2"></span><h3>
+  <div class="panel-heading codesum"><span class="anchor" id="common-__unnamed__%7E7"></span><h3>
       <a data-toggle="popover" data-html="true" tabindex="0" 
 	   data-trigger="focus"
-	 data-content="<h4>Used Elsewhere:</h4><a href='../proc/commandline.html#common-__unnamed__'>commandLine</a> (subroutine)<br><a href='../proc/constructor.html#common-__unnamed__%7E3'>constructor</a> (subroutine)<br><a href='../proc/createhtml.html#common-__unnamed__%7E4'>createHTML</a> (subroutine)<br><a href='../proc/exportmaterial.html#common-__unnamed__%7E5'>exportMaterial</a> (subroutine)<br><a href='../proc/exportplaca.html#common-__unnamed__%7E6'>exportPlaca</a> (subroutine)<br><a href='../proc/exportresultados.html#common-__unnamed__%7E7'>exportResultados</a> (subroutine)<br><a href='../program/wallter.html#common-__unnamed__%7E8'>WALLTER</a> (program)<br>">common</a>
+	 data-content="<h4>Used Elsewhere:</h4><a href='../proc/commandline.html#common-__unnamed__'>commandLine</a> (subroutine)<br><a href='../proc/datos.html#common-__unnamed__%7E2'>datos</a> (subroutine)<br><a href='../proc/analiticanavier.html#common-__unnamed__%7E3'>analiticaNavier</a> (subroutine)<br><a href='../proc/createhtml.html#common-__unnamed__%7E4'>createHTML</a> (subroutine)<br><a href='../proc/exportmaterial.html#common-__unnamed__%7E5'>exportMaterial</a> (subroutine)<br><a href='../proc/exportplaca.html#common-__unnamed__%7E6'>exportPlaca</a> (subroutine)<br><a href='../proc/resanaliticos.html#common-__unnamed__%7E8'>resAnaliticos</a> (subroutine)<br><a href='../program/wallter.html#common-__unnamed__%7E9'>WALLTER</a> (program)<br>">common</a>
       
   </h3></div>
   <div class="panel-body">
@@ -661,7 +520,7 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
   
 <tr>
   
-  <td><span class="anchor" id="variable-resultsfile%7E2"></span>real</td>
+  <td><span class="anchor" id="variable-resultsfile%7E7"></span>real</td>
   
   
   <td></td><td>::</td>
@@ -675,7 +534,7 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
   
 <tr>
   
-  <td><span class="anchor" id="variable-configfile%7E2"></span>real</td>
+  <td><span class="anchor" id="variable-configfile%7E7"></span>real</td>
   
   
   <td></td><td>::</td>
@@ -735,19 +594,17 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
       
       <a class="list-group-item" href="../proc/commandline.html">commandLine</a>
       
-      <a class="list-group-item" href="../proc/constructor.html">constructor</a>
+      <a class="list-group-item" href="../proc/constructmatriz.html">constructMatriz</a>
       
-      <a class="list-group-item" href="../interface/constructor.html">constructor</a>
+      <a class="list-group-item" href="../proc/constructvector.html">constructVector</a>
       
       <a class="list-group-item" href="../proc/createhtml.html">createHTML</a>
       
-      <a class="list-group-item" href="../proc/datosplaca.html">datosPlaca</a>
+      <a class="list-group-item" href="../proc/datos.html">datos</a>
       
       <a class="list-group-item" href="../proc/exportmaterial.html">exportMaterial</a>
       
       <a class="list-group-item" href="../proc/exportplaca.html">exportPlaca</a>
-      
-      <a class="list-group-item" href="../proc/exportresultados.html">exportResultados</a>
       
       <a class="list-group-item" href="../proc/fcholesky.html">fCholesky</a>
       
@@ -760,6 +617,10 @@ subroutine datosPlaca(ancho, largo, espesor, rigidez, n, m)
       <a class="list-group-item" href="../proc/printmatrix.html">printMatrix</a>
       
       <a class="list-group-item" href="../proc/printvector.html">printVector</a>
+      
+      <a class="list-group-item" href="../proc/resanaliticos.html">resAnaliticos</a>
+      
+      <a class="list-group-item" href="../proc/resnumericos.html">resNumericos</a>
       
     </div>
   </div>
