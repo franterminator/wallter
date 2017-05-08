@@ -3,21 +3,9 @@
 !  en sus cantos con carga hidraulica hasta la mitad de su largo
 Program WALLTER
 
-    !< Interface para poder fijar las dimensiones de la matriz en la
-    ! subroutine constructor
-    interface
-        subroutine constructor(matriz,f,navier,n,m)
-            real*8,dimension(:,:),allocatable,intent(inout):: matriz    !! sistema de ecuaciones
-            real*8,dimension(:),allocatable,intent(inout):: f           !! vector terminos independientes
-            real*8,dimension(:,:),allocatable,intent(inout):: navier    !! resultados analiticos
-            integer,intent(out):: n,m
-        end subroutine
-    end interface
-
     real*8, dimension(:,:),allocatable:: matriz !! sistema de ecuaciones
     real*8, dimension(:),allocatable:: f        !! vector terminos independientes
     real*8,dimension(:,:),allocatable:: navier
-    integer:: n, m                              !! numero de puntos para discretizar largo(n) y ancho(m)
 
     real*8, dimension(:,:),allocatable:: fMatriz!! solucion en forma matricial
     integer,dimension(2):: forma                !! forma de la matriz solucion
@@ -28,6 +16,9 @@ Program WALLTER
     logical:: asserts = .FALSE.                 !! si se activa se imprimen los datos de la factorizacion
     logical:: exists
 
+    real*8:: ancho,largo,espesor,rigidez
+    integer:: n, m                              !! numero de puntos para discretizar largo(n) y ancho(m)
+
     COMMON resultsFile,configFile
 
     inquire(file=resultsFile,exist=exists)
@@ -36,7 +27,12 @@ Program WALLTER
     ! inicio del programa
     call commandLine(asserts)       ! opciones de ejecucion
     call bienvenido()               ! mensaje de bienvenida (header)
-    call constructor(matriz,f,navier,n,m)  ! calculo de las matrices
+    call datos(ancho,largo,espesor,rigidez,n,m)
+
+    allocate(matriz(n*m,n*m))
+    call constructMatriz(ancho,largo,espesor,matriz,n,m)
+    allocate(f(n*m))
+    call constructVector(largo,rigidez,f,n,m)
 
     ! muestra la matriz y factorizacion
     if (asserts) then
@@ -51,32 +47,27 @@ Program WALLTER
         call linearSystem(matriz,f,n,m)     ! resuelve
         call linearSystem(matriz,f,n,m)     ! resuelve
 
-        ! cambio de vector a matriz solucion
-        allocate(fMatriz(n,m))
-        forma(1) = n
-        forma(2) = m
-        fMatriz = reshape(f,forma,order=orden)
-        call printMatrix(fMatriz, 'Vector solucion')
-
-        call resNumericos(fMatriz,n,m)
-
     ! muestra solo la solucion
     else
+
         ! factoriza y resuelve
         call fCholesky(matriz,n,m)
         call linearSystem(matriz,f,n,m)
         call linearSystem(matriz,f,n,m)
-
-        ! cambio de vector a matriz solucion
-        allocate(fMatriz(n,m))
-        forma(1) = n
-        forma(2) = m
-        fMatriz = reshape(f,forma,order=orden)
-        call printMatrix(fMatriz, 'Vector solucion')
-
-        call resNumericos(fMatriz,n,m)
-
     end if
+
+    ! cambio de vector a matriz solucion
+    allocate(fMatriz(m,n))
+    forma(1) = n
+    forma(2) = m
+    fMatriz = reshape(f,forma,order=orden)
+    call printMatrix(fMatriz, 'Vector solucion')
+    call resNumericos(ancho,largo,fMatriz,n,m)
+
+    allocate(navier(m,n))
+    call analiticaNavier(navier,ancho,largo,rigidez,n,m)
+    call resAnaliticos(ancho,largo,navier,n,m)
+
     ! para que no se cierre el programa derepente
     write(*,*) "Gracias por usar el programa..."
     read(*,*)
@@ -197,7 +188,7 @@ subroutine bienvenido()
 end subroutine
 
 !< Solicita los datos necesarios para el calculo de la flecha.
-subroutine datosPlaca(ancho,largo,espesor,rigidez,n,m)
+subroutine datos(ancho,largo,espesor,rigidez,n,m)
     integer*4,intent(out):: n,m                 !! numero de puntos para discretizar la placa
     real*8,intent(out):: largo, ancho, espesor  !! dimensiones de la placa
     real*8,intent(out):: rigidez                !! rigidez a flexion -> D = E*t^3/(12(1-v^2))
@@ -295,24 +286,13 @@ end subroutine
 
 !< Calculo los terminos de la matriz y el vector de terminso independientes y
 !  los coloca en su sitio. La matriz se almacena en banda.
-subroutine constructor(matriz,f,navier,n,m)
-    real*8,dimension(:,:),allocatable,intent(inout):: matriz
-    real*8,dimension(:),allocatable,intent(inout):: f
-    real*8,dimension(:,:),allocatable,intent(inout):: navier
-    integer,intent(out):: n,m
+subroutine constructMatriz(ancho,largo,espesor,matriz,n,m)
+    real*8,dimension(n*m,n*m),intent(inout):: matriz
+    real*8,intent(in):: ancho,largo,espesor
+    integer,intent(in):: n,m
 
-    real*8:: ancho,largo,espesor,A,B,C,deltaX,deltaY
-    real*8:: rigidez,presion
+    real*8:: A,B,C,deltaX,deltaY
     integer:: i,j
-
-    character(len=50):: resultsFile,configFile
-    COMMON resultsFile,configFile
-
-    call datosPlaca(ancho,largo,espesor,rigidez,n,m)
-
-    allocate(navier(n,m))
-    call analiticaNavier(navier,ancho,largo,rigidez,n,m)
-    call resAnaliticos(navier,n,m)
 
     ! calculo de los coef A, B y C
     deltaX = ancho / (n + 1)
@@ -323,9 +303,7 @@ subroutine constructor(matriz,f,navier,n,m)
     write(*,'(A,3(f0.2,X),A)') "[A,B,C] -> [ ",A,B,C,"]"
 
     !matriz y vector a cero
-    allocate(matriz(n*m,n*m),f(n*m))
     do i=1,n*m
-        f(i) = 0
         do j=1,n*m
             matriz(i,j) = 0
         end do
@@ -341,6 +319,21 @@ subroutine constructor(matriz,f,navier,n,m)
         end if
         if(i+n <= n*m) matriz(i,n+1) = C
     end do
+end subroutine
+
+subroutine constructVector(largo,rigidez,vector,n,m)
+    real*8,dimension(n*m),intent(inout):: vector
+    real*8,intent(in):: largo,rigidez
+    integer,intent(in):: n,m
+
+    real*8:: deltaY,presion
+
+    ! vector a cero
+    do i=1,n*m
+        vector(i) = 0
+    end do
+
+    deltaY = largo / (m + 1)
 
     ! construccion vector
     j = 1
@@ -350,9 +343,9 @@ subroutine constructor(matriz,f,navier,n,m)
 
         !solo hasta la mitad
         if (presion < 0) then
-            f(i) = 0
+            vector(i) = 0
         else
-            f(i) = presion
+            vector(i) = presion
         end if
 
         ! las filas tienen la misma presion
@@ -420,7 +413,7 @@ end subroutine
 subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
     real*8,intent(in):: ancho,largo
     real*8,intent(in):: rigidez
-    real*8,dimension(n,m),intent(out):: w
+    real*8,dimension(m,n),intent(out):: w
     integer,intent(in):: n, m
 
     integer:: i, j, p, q
@@ -461,7 +454,7 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
                     w_ku = w_ku**2
                     w_ku = p_ku / (pi**4 * rigidez * w_ku)
 
-                    w(i,j) = w(i,j) + w_ku * sin(k*pi*X/ancho) * sin(u*pi*Y/largo)
+                    w(j,i) = w(j,i) + w_ku * sin(k*pi*X/ancho) * sin(u*pi*Y/largo)
                 end do
             end do
         end do

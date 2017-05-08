@@ -66,45 +66,22 @@ subroutine exportPlaca(largo,ancho,espesor)
     close(12)
 end subroutine
 
-subroutine resAnaliticos(navier,n,m)
-    real*8,dimension(n,m),intent(in):: navier
+subroutine resNumericos(ancho,largo,fMatriz,n,m)
+    real*8,dimension(n,m),intent(in):: fMatriz
+    real*8,intent(in):: ancho,largo
     integer,intent(in):: n,m
+
+    real*8:: deltaX, deltaY
+
     character(len=50):: resultsFile,configFile
     COMMON resultsFile,configFile
+
+    deltaX = ancho / (n + 1)
+    deltaY = largo / (m + 1)
 
     open(unit=12,file=resultsFile,status='old',position="append")
     write(12,'(10X,A)') '<div class="box-item" id="resultados">'
     write(12,'(15X,A)') '<header id="azul"> Resultados </header>'
-    write(12,'(15X,A)') '<table id="tAnalitico">'
-    write(12,'(20X,A)') '<tr class="tr-h">'
-    write(12,'(25X,A,I5,A)') '<td rowspan="',m+2,'"> Y </th>'
-    write(12,'(20X,A)') '</tr>'
-
-    do i=1,n
-        write(12,'(20X,A)') '<tr>'
-        write(12,'(25X,A,I5,A)') '<td class="td-h">',i*2,'</td>'
-        write(12,'(25X,*(A,f0.4,A))') ('<td>',navier(i,j),'</td>',j=1,m)
-        write(12,'(20X,A)') '</tr>'
-    end do
-
-    write(12,'(20X,A)') '<tr class="tr-h">'
-    write(12,'(25X,A)') '<td>/</td>'
-    write(12,'(25X,*(A,I5,A))') ('<td>',j*2,'</td>',j=1,m)
-    write(12,'(20X,A)') '</tr>'
-    write(12,'(20X,A)') '<tr class="tr-h">'
-    write(12,'(25X,A,I4,A)') '<td>0</td><td colspan="',n+1,'">X</td>'
-    write(12,'(20X,A)') '</tr>'
-    write(12,'(15X,A)')'</table>'
-    close(12)
-end subroutine
-
-subroutine resNumericos (fMatriz,n,m)
-    real*8,dimension(n,m),intent(in):: fMatriz
-    integer,intent(in):: n,m
-    character(len=50):: resultsFile,configFile
-    COMMON resultsFile,configFile
-
-    open(unit=12,file=resultsFile,status='old',position="append")
     write(12,'(15X,A)') '<table id="tNumerico">'
     write(12,'(20X,A)') '<tr class="tr-h">'
     write(12,'(25X,A,I5,A)') '<td rowspan="',m+2,'"> Y </th>'
@@ -112,17 +89,54 @@ subroutine resNumericos (fMatriz,n,m)
 
     do i=1,n
         write(12,'(20X,A)') '<tr>'
-        write(12,'(25X,A,I5,A)') '<td class="td-h">',i*2,'</td>'
+        write(12,'(25X,A,F0.3,A)') '<td class="td-h">',i*deltaX,'</td>'
         write(12,'(25X,*(A,f0.4,A))') ('<td>',fMatriz(i,j),'</td>',j=1,m)
         write(12,'(20X,A)') '</tr>'
     end do
 
     write(12,'(20X,A)') '<tr class="tr-h">'
     write(12,'(25X,A)') '<td>/</td>'
-    write(12,'(25X,*(A,I5,A))') ('<td>',j*2,'</td>',j=1,m)
+    write(12,'(25X,*(A,F0.3,A))') ('<td>',j*deltaY,'</td>',j=1,m)
     write(12,'(20X,A)') '</tr>'
     write(12,'(20X,A)') '<tr class="tr-h">'
-    write(12,'(25X,A,I4,A)') '<td>0</td><td colspan="',n+1,'">X</td>'
+    write(12,'(25X,A,I4,A)') '<td>O</td><td colspan="',n+1,'">X</td>'
+    write(12,'(20X,A)') '</tr>'
+    write(12,'(15X,A)')'</table>'
+    close(12)
+end subroutine
+
+subroutine resAnaliticos(ancho,largo,navier,n,m)
+    real*8,dimension(n,m),intent(in):: navier
+    real*8,intent(in):: ancho,largo
+    integer,intent(in):: n,m
+
+    real*8:: deltaX, deltaY
+
+    character(len=50):: resultsFile,configFile
+    COMMON resultsFile,configFile
+
+    deltaX = ancho / (n + 1)
+    deltaY = largo / (m + 1)
+
+    open(unit=12,file=resultsFile,status='old',position="append")
+    write(12,'(15X,A)') '<table id="tAnalitico">'
+    write(12,'(20X,A)') '<tr class="tr-h">'
+    write(12,'(25X,A,I5,A)') '<td rowspan="',m+2,'"> Y </th>'
+    write(12,'(20X,A)') '</tr>'
+
+    do i=1,n
+        write(12,'(20X,A)') '<tr>'
+        write(12,'(25X,A,F0.3,A)') '<td class="td-h">',i*deltaX,'</td>'
+        write(12,'(25X,*(A,f0.4,A))') ('<td>',navier(i,j),'</td>',j=1,m)
+        write(12,'(20X,A)') '</tr>'
+    end do
+
+    write(12,'(20X,A)') '<tr class="tr-h">'
+    write(12,'(25X,A)') '<td>/</td>'
+    write(12,'(25X,*(A,F0.3,A))') ('<td>',j*deltaY,'</td>',j=1,m)
+    write(12,'(20X,A)') '</tr>'
+    write(12,'(20X,A)') '<tr class="tr-h">'
+    write(12,'(25X,A,I4,A)') '<td>O</td><td colspan="',n+1,'">X</td>'
     write(12,'(20X,A)') '</tr>'
     write(12,'(15X,A)')'</table>'
 
