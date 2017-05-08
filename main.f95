@@ -5,34 +5,36 @@ Program WALLTER
 
     real*8, dimension(:,:),allocatable:: matriz !! sistema de ecuaciones
     real*8, dimension(:),allocatable:: f        !! vector terminos independientes
-    real*8,dimension(:,:),allocatable:: navier
+    real*8,dimension(:,:),allocatable:: navier  !! vector terminos analiticos
 
     real*8, dimension(:,:),allocatable:: fMatriz!! solucion en forma matricial
     integer,dimension(2):: forma                !! forma de la matriz solucion
     integer,dimension(2):: orden = (/2,1/)      !! orden de los numeros al cambiar vector a matriz solucion
 
-    character(len=50):: resultsFile = './result/resultados.html'
-    character(len=50):: configFile = ''
+    character(len=50):: resultsFile = './result/resultados.html'    !! directorio donde se escribiran los resultados
+    character(len=50):: configFile = ''                             !! directorio donde se encuentran los config file
     logical:: asserts = .FALSE.                 !! si se activa se imprimen los datos de la factorizacion
-    logical:: exists
+    logical:: exists                            !! comprueba la existencia de los directorios de resultados
 
-    real*8:: ancho,largo,espesor,rigidez
+    real*8:: ancho,largo,espesor                !! dimensiones de la placa
+    real*8:: rigidez                            !! rigidez a flexion de la placa
     integer:: n, m                              !! numero de puntos para discretizar largo(n) y ancho(m)
 
-    COMMON resultsFile,configFile
+    COMMON resultsFile,configFile               !! variables globales
 
+    ! comprueba si existe el directorio de resultados
     inquire(file=resultsFile,exist=exists)
-    if(.NOT.exists) resultsFile = 'result.html'
+    if(.NOT.exists) resultsFile = 'result.html' ! si no existe crea el archivo al lado del programa
 
     ! inicio del programa
-    call commandLine(asserts)       ! opciones de ejecucion
-    call bienvenido()               ! mensaje de bienvenida (header)
-    call datos(ancho,largo,espesor,rigidez,n,m)
+    call commandLine(asserts)                   ! opciones de ejecucion
+    call bienvenido()                           ! mensaje de bienvenida (header)
+    call datos(ancho,largo,espesor,rigidez,n,m) ! datos para poder funcionar el programa
 
-    allocate(matriz(n*m,n*m))
-    call constructMatriz(ancho,largo,matriz,n,m)
-    allocate(f(n*m))
-    call constructVector(largo,rigidez,f,n,m)
+    allocate(matriz(n*m,n*m))                   ! fija la matriz de resultados numericos
+    call constructMatriz(ancho,largo,matriz,n,m)! construye la matriz para los resultados numericos
+    allocate(f(n*m))                            ! fija el vector de resultados numericos
+    call constructVector(largo,rigidez,f,n,m)   ! construye el vector para los resultados numericos
 
     ! muestra la matriz y factorizacion
     if (asserts) then
@@ -44,8 +46,8 @@ Program WALLTER
         call printMatrix(matriz ,'Matriz (factorizada)')
 
         ! resolucion del sistema
-        call linearSystem(matriz,f,n,m)     ! resuelve
-        call linearSystem(matriz,f,n,m)     ! resuelve
+        call linearSystem(matriz,f,n,m)
+        call linearSystem(matriz,f,n,m)
 
     ! muestra solo la solucion
     else
@@ -64,6 +66,7 @@ Program WALLTER
     call printMatrix(fMatriz, 'Vector solucion')
     call resNumericos(ancho,largo,fMatriz,n,m)
 
+    ! calcula los resultados analiticos por Navier
     allocate(navier(m,n))
     call analiticaNavier(navier,ancho,largo,rigidez,n,m)
     call resAnaliticos(ancho,largo,navier,n,m)
@@ -284,7 +287,7 @@ subroutine datos(ancho,largo,espesor,rigidez,n,m)
     call exportPlaca(largo,ancho,espesor)
 end subroutine
 
-!< Calculo los terminos de la matriz y el vector de terminso independientes y
+!< Calculo los terminos de la matriz de resultados numericos y
 !  los coloca en su sitio. La matriz se almacena en banda.
 subroutine constructMatriz(ancho,largo,matriz,n,m)
     real*8,dimension(n*m,n*m),intent(inout):: matriz
@@ -321,6 +324,7 @@ subroutine constructMatriz(ancho,largo,matriz,n,m)
     end do
 end subroutine
 
+!< Construye el vector de resultados numericos
 subroutine constructVector(largo,rigidez,vector,n,m)
     real*8,dimension(n*m),intent(inout):: vector
     real*8,intent(in):: largo,rigidez
