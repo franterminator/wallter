@@ -63,12 +63,13 @@ Program WALLTER
     forma(1) = n
     forma(2) = m
     fMatriz = reshape(f,forma,order=orden)
-    call printMatrix(fMatriz, 'Vector solucion')
+    call printMatrix(fMatriz, 'Solucion numerica')
     call resNumericos(ancho,largo,fMatriz,n,m)
 
     ! calcula los resultados analiticos por Navier
     allocate(navier(m,n))
     call analiticaNavier(navier,ancho,largo,rigidez,n,m)
+    call printMatrix(navier, 'Solucion analitica')
     call resAnaliticos(ancho,largo,navier,n,m)
 
     ! para que no se cierre el programa derepente
@@ -452,7 +453,11 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
         write(*,'(A,I4,I4,A)') "Número de iteraciones para el calculo analitico -> [r,s] = [",r,s,"]"
     else
         ! datos para el bucle de calculo de flecha
-        write(*,*) 'Número de iteraciones para el calculo analitico:'
+         ! Datos tecnicos de la placa
+        write(*,*) "*************************"
+        write(*,*) "* NUMERO DE ITERACIONES *"
+        write(*,*) "*************************"
+        write(*,*) "-> Numero de iteraciones para el calculo analitico: "
         write(*,'(A,$)') 'n (interger): '
         read(*,*) r
         write(*,'(A,$)') 'm (interger): '
@@ -490,10 +495,6 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
                 end do
             end do
         end do
-    end do
-
-    do i=1,ubound(w,1)
-        write(*,'(*(f0.4,5x))') (w(i,j),j=1,ubound(w,2))
     end do
 
 end subroutine
