@@ -1,0 +1,14 @@
+ Creado con configurador de material 1.5
+Datos placa 
+ancho:: 5
+largo:: 5
+espesor:: 0.1
+Datos discretización 
+Null 
+Null 
+Datos material 
+young:: 210000
+poisson:: 0.3
+Datos iteraciones analiticas 
+r:: 20
+s:: 20

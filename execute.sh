@@ -14,9 +14,8 @@ do
 			./bin/Release/wallter.exe -a
             ;;
         "Escoger archivo de configuracion")
-            echo "Escoga el archivo de configuracion:"
-			echo "./config/* :"
-			for file in ./config/*; do
+            echo "Escoga el archivo de configuracion de la carpeta config que desee:"
+			for file in ./config/*.txt; do
 				((i+=1))
 				names[i]="./config/${file##*/}"
 				echo "$i) ${names[i]}"

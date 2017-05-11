@@ -1,0 +1,99 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Configurador 1.5</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="description" content="Una página web sencilla para generar archivos de configuración para usar con el pograma
+	github.com/franterminator/wallter" />
+	<meta name="keywords" content="wallter, placa, flechas, metal, agua, carga, presion, piscina" />
+	<meta name="robots" content="index,follow" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+	body {
+		background: #ddd123;
+	}
+	
+	.conteiner {
+		margin: 1cm auto;
+		background: #ffffff;
+		border-radius: 25px;
+		border: 2px solid #73AD21;
+		padding: 20px;
+		width: 500px;
+		height: 1000px;
+	}
+	
+	input[type=number] {
+		width: 250px;
+		padding: 4px 20px;
+		margin: 8px 0;
+		box-sizing: border-box;
+	}
+
+	</style>
+</head>
+<body>
+	<div class="conteiner">
+		<h1> Configurador </h1>
+		<p>
+			Cuando acabe de rellenar los campos que le interese.
+			Pulse el boton para generar el archivo de configuración.
+		</p>
+		<form id="datos" method="get" action="">
+			<fieldset>
+				<legend>Datos material:</legend>
+				Ancho (en metros)::  
+				<input type="number" name="ancho"><br>
+				Largo (en metros)::
+				<input type="number" name="largo"><br>
+				Espesor (en metros)::
+				<input type="number" name="espesor"><br>
+			</fieldset>
+			<fieldset>
+				<legend>Datos discretización:</legend>
+				n::
+				<input type="number" name="n"><br>
+				m::
+				<input type="number" name="m"><br>
+			</fieldset>
+			<fieldset>
+				<legend>Datos material:</legend>
+				young (en MPa)::
+				<input type="number" name="young"><br>
+				poisson::
+				<input type="number" name="poisson"><br>
+			</fieldset>
+			<fieldset>
+				<legend>Datos analitico:</legend>
+				r::
+				<input type="number" name="r"><br>
+				s::
+				<input type="number" name="s"><br>
+			</fieldset>
+		</form>
+		<button onclick="createText()"> Generar archivo </button><br>
+		<textarea rows="16" cols="30" id="created"></textarea>
+	</div>
+	
+	<script>
+		function createText() {
+			var text = " Creado con configurador de material 1.5\n";
+			var inputs = document.getElementsByTagName('input');
+			var i = 0;
+			for(i = 0; i < inputs.length; i++) {
+				if(i == 0) text = text + "Datos placa \n";
+				if(i == 3) text = text + "Datos discretización \n";
+				if(i == 5) text = text + "Datos material \n";
+				if(i == 7) text = text + "Datos iteraciones analiticas \n";
+				if(inputs[i].value <= 0 || inputs[i].value == "") {
+					text = text + "Null \n";
+				} else {
+					text = text + inputs[i].name + ":: " + inputs[i].value + "\n" ;
+				}
+			};
+			document.getElementById("created").innerHTML = text;
+		}
+	</script>
+</body>
+</html>

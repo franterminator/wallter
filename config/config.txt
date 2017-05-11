@@ -3,11 +3,11 @@ ancho:: 20
 largo:: 20
 espesor:: 0.01
 Datos discretizacion
-n:: 10
-m:: 10
+n:: 3
+m:: 3
 Datos material
-Young:: 210000
-poisson: 0.3
+young:: 210000
+poisson:: 0.3
 Datos analitica
 r:: 20
 s:: 20
