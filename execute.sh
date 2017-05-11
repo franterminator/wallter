@@ -7,11 +7,11 @@ do
     case $opt in
         "Por defecto")
             echo "Ha escogido escoger el programa con las opciones por defecto."
-			./bin/Release/wallter.exe 
+			./wallter.exe 
             ;;
         "Imprimir resultados factorizacion")
             echo "Ha escogido imprimir los resultados de la factorizacion."
-			./bin/Release/wallter.exe -a
+			./wallter.exe -a
             ;;
         "Escoger archivo de configuracion")
             echo "Escoga el archivo de configuracion de la carpeta config que desee:"
@@ -21,7 +21,7 @@ do
 				echo "$i) ${names[i]}"
 			done
 			read sel
-			./bin/Release/wallter.exe -c ${names[$sel]}
+			./wallter.exe -c ${names[$sel]}
             ;;
         "Salir")
             break

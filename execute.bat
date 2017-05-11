@@ -19,11 +19,11 @@ IF %M%==3 GOTO CONFIGURATION
 IF %M%==4 GOTO EOF
 
 :NORMAL
-start "Wallter" "bin/Release/wallter.exe"
+start "Wallter" "./wallter.exe"
 GOTO MENU
 
 :FACTORIZATION
-start "Wallter" "bin/Release/wallter.exe" -a
+start "Wallter" "./wallter.exe" -a
 GOTO MENU
 
 :CONFIGURATION
@@ -35,7 +35,7 @@ SET vector[!n!]=%%~nxi
 SET /A n=n+1
 )
 set /p sel=numero archivo: 
-start "Wallter" "bin/Release/wallter.exe" -c "./config/!vector[%sel%]!"
+start "Wallter" "./wallter.exe" -c "./config/!vector[%sel%]!"
 GOTO MENU
 
 :EOF
