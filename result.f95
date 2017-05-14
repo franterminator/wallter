@@ -93,7 +93,7 @@ subroutine resNumericos(ancho,largo,fMatriz,n,m)
     write(12,'(25X,A,I5,A)') '<td rowspan="',m+2,'"> Y </th>'
     write(12,'(20X,A)') '</tr>'
 
-    do i=1,n
+    do i=n,1,-1
         write(12,'(20X,A)') '<tr>'
         write(12,'(25X,A,F0.3,A)') '<td class="td-h">',i*deltaX,'</td>'
         write(12,'(25X,*(A,f0.4,A))') ('<td>',fMatriz(i,j),'</td>',j=1,m)
@@ -131,7 +131,7 @@ subroutine resAnaliticos(ancho,largo,navier,n,m)
     write(12,'(25X,A,I5,A)') '<td rowspan="',m+2,'"> Y </th>'
     write(12,'(20X,A)') '</tr>'
 
-    do i=1,n
+    do i=n,1,-1
         write(12,'(20X,A)') '<tr>'
         write(12,'(25X,A,F0.3,A)') '<td class="td-h">',i*deltaX,'</td>'
         write(12,'(25X,*(A,f0.4,A))') ('<td>',navier(i,j),'</td>',j=1,m)

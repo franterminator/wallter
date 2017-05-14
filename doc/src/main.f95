@@ -63,12 +63,13 @@ Program WALLTER
     forma(1) = n
     forma(2) = m
     fMatriz = reshape(f,forma,order=orden)
-    call printMatrix(fMatriz, 'Vector solucion')
+    call printMatrix(fMatriz, 'Solucion numerica')
     call resNumericos(ancho,largo,fMatriz,n,m)
 
     ! calcula los resultados analiticos por Navier
     allocate(navier(m,n))
     call analiticaNavier(navier,ancho,largo,rigidez,n,m)
+    call printMatrix(navier, 'Solucion analitica')
     call resAnaliticos(ancho,largo,navier,n,m)
 
     ! para que no se cierre el programa derepente
@@ -192,6 +193,7 @@ end subroutine
 
 !< Solicita los datos necesarios para el calculo de la flecha.
 subroutine datos(ancho,largo,espesor,rigidez,n,m)
+    ! ------------- Variables ----------------- !
     integer*4,intent(out):: n,m                 !! numero de puntos para discretizar la placa
     real*8,intent(out):: largo, ancho, espesor  !! dimensiones de la placa
     real*8,intent(out):: rigidez                !! rigidez a flexion -> D = E*t^3/(12(1-v^2))
@@ -201,16 +203,25 @@ subroutine datos(ancho,largo,espesor,rigidez,n,m)
 
     logical:: exists = .FALSE.                  !! existe el archivo de configuracion?
     character(len=50):: label                   !! etiquetas del archivo de configuracion
+    real*8:: numero = 0
 
+    integer*4,dimension(7):: modif = 0
+    integer:: i
+    integer:: sel=1
+    character(len=7),dimension(7):: etiquetas = &
+    (/"ancho  ","largo  ","espesor","n      ","m      ","Young  ","poisson"/)
+
+    integer*4:: ios=0
     character(len=50):: resultsFile,configFile
     COMMON resultsFile,configFile
+
+    ! ************** Codigo ****************** !
 
     ! comprueba que se haya definido un archivo de configuracion y de que existe
     if(configFile /= '') then
         inquire(file=configFile,exist=exists)
         if(.NOT.exists) then
             write(*,*) 'No se ha encontrado el archivo de configuracion.'
-            write(*,*)
         end if
     end if
 
@@ -218,17 +229,47 @@ subroutine datos(ancho,largo,espesor,rigidez,n,m)
     if(exists) then
         open(unit=24,file=configFile,status='old',action='read')    ! se abre
         ! se lee la informacion, quitando las etiquetas
-        ! importante el orden
-        read(24,*) label
-        read(24,*) label,ancho
-        read(24,*) label,largo
-        read(24,*) label,espesor
-        read(24,*) label
-        read(24,*) label,n
-        read(24,*) label,m
-        read(24,*) label
-        read(24,*) label,Young
-        read(24,*) label,poisson
+        ! importante poner las etiquetas como en los archivos ejemplo
+
+        do while(ios>=0)
+            read(24,*,iostat=ios) label, numero
+
+            ! check if there were problems reading the file
+            if(ios < 0) then
+                continue
+            end if
+
+            ! check label reference
+            if(label=='ancho::') then
+                ancho = numero
+                modif(1) = 1
+            end if
+            if(label=='largo::') then
+                largo = numero
+                modif(2) = 1
+            end if
+            if(label=='espesor::') then
+                espesor = numero
+                modif(3) = 1
+            end if
+            if(label=='n::') then
+                n = numero
+                modif(4) = 1
+            end if
+            if(label=='m::') then
+                m = numero
+                modif(5) = 1
+            end if
+            if(label=='young::') then
+                Young = numero
+                modif(6) = 1
+            end if
+            if(label=='poisson::') then
+                poisson = numero
+                modif(7) = 1
+            end if
+        end do
+        close(24)
 
         ! se imprime los datos obtenidos por si el usuario los quiere cambiar
         write(*,*) "Datos config file ::"
@@ -236,46 +277,90 @@ subroutine datos(ancho,largo,espesor,rigidez,n,m)
         write(*,'(5X,A,i2,A,i2,A)') "Datos discretizacion [n,m] -> [",n,",",m,"]"
         write(*,'(5X,A,f0.1,A,f0.3)') "Datos material -> Young:: ",Young,"; poisson:: ",poisson
 
-    else
-        write(*,*) 'Se procede a pedir los datos al usuario.'
-        write(*,*) 'Si se equivoca en algun numero podra cambiarlo al final de programa'
+    endif
 
+    call linea()
+    write(*,*) 'Se procede a pedir los datos al usuario que falten.'
+    write(*,*) 'Si se equivoca en algun numero podra cambiarlo al final de programa.'
+
+    do while(sel==1)
         ! Datos tecnicos de la placa
-        write(*,*) "*************************"
-        write(*,*) "*   DATOS DE LA PLACA   *"
-        write(*,*) "*************************"
-        write(*,*) "-> ancho de la placa"
-        write(*,'(A,$)') "(metros) "
-        read(*,*) ancho
-        write(*,*) "-> largo de la placa"
-        write(*,'(A,$)') "(metros) "
-        read(*,*) largo
-        write(*,*) "-> espesor de la placa"
-        write(*,'(A,$)') "(metros) "
-        read(*,*) espesor
+        if(modif(1)==0 .OR. modif(2)==0 .OR. modif(3)==0) then
+            write(*,*) "*************************"
+            write(*,*) "*   DATOS DE LA PLACA   *"
+            write(*,*) "*************************"
+            if(modif(1)==0) then
+                write(*,*) "-> ancho de la placa"
+                write(*,'(A,$)') "(metros) "
+                read(*,*) ancho; modif(1) = 1
+            end if
+            if (modif(2)==0) then
+                write(*,*) "-> largo de la placa"
+                write(*,'(A,$)') "(metros) "
+                read(*,*) largo; modif(2) = 1
+            end if
+            if (modif(3)==0) then
+                write(*,*) "-> espesor de la placa"
+                write(*,'(A,$)') "(metros) "
+                read(*,*) espesor; modif(3) = 1
+            end if
+        end if
 
         ! datos para la discretizacion del modelo
-        write(*,*) "*************************"
-        write(*,*) "*   NUMERO DE PUNTOS    *"
-        write(*,*) "*************************"
-        write(*,*) "-> puntos para discretizar el ancho"
-        write(*,'(A,$)') "(integer) "
-        read(*,*) n
-        write(*,*) "-> puntos para discretizar el largo"
-        write(*,'(A,$)') "(integer) "
-        read(*,*) m
+        if(modif(4)==0 .OR. modif(5)==0) then
+            write(*,*) "*************************"
+            write(*,*) "*   NUMERO DE PUNTOS    *"
+            write(*,*) "*************************"
+            if(modif(4)==0) then
+                write(*,*) "-> puntos para discretizar el ancho"
+                write(*,'(A,$)') "(integer) "
+                read(*,*) n; modif(4) = 1
+            endif
+            if(modif(5)==0) then
+                write(*,*) "-> puntos para discretizar el largo"
+                write(*,'(A,$)') "(integer) "
+                read(*,*) m; modif(5) = 1
+            endif
+        endif
 
         ! propiedades del material
-        write(*,*) "*************************"
-        write(*,*) "*   DATOS DEL MATERIAL  *"
-        write(*,*) "*************************"
-        write(*,*) "-> Modulo de Young"
-        write(*,'(A,$)') "(MPa) "
-        read(*,*) Young
-        write(*,*) "-> Coef. de poisson"
-        write(*,'(A,$)') "(_real_) "
-        read(*,*) poisson
-    end if
+        if(modif(6)==0 .OR. modif(7)==0) then
+            write(*,*) "*************************"
+            write(*,*) "*   DATOS DEL MATERIAL  *"
+            write(*,*) "*************************"
+            if(modif(6)==0) then
+                write(*,*) "-> Modulo de Young"
+                write(*,'(A,$)') "(MPa) "
+                read(*,*) Young; modif(6) = 1
+            endif
+            if(modif(7)==0) then
+                write(*,*) "-> Coef. de poisson"
+                write(*,'(A,$)') "(_real_) "
+                read(*,*) poisson; modif(7) = 1
+            endif
+        endif
+
+        ! cambiar valores si se han introducido valores a mano
+        ! si hay un archivo se entiende que el usuario no tiene
+        ! la necesidad de cambiar ningun dato.
+        if(.NOT.exists) then
+            call linea()
+            write(*,*) "Desea cambiar algun valor:"
+            write(*,*) "1) Si"
+            write(*,*) "2) No"
+            read(*,*) sel
+            if(sel==1) then
+                write(*,"(5X,A)") "Que valor desea cambiar?"
+                do i = 1,7
+                    write(*,"(10X,I2,A,A)") i,") ",etiquetas(i)
+                end do
+                read(*,*) i
+                modif(i) = 0
+            end if
+        else
+            sel = 20
+        end if
+    end do
 
     ! MPa (N/mm3) -> 1000 KPa (kN/m2)
     rigidez = Young*1000*espesor**3
@@ -290,6 +375,7 @@ end subroutine
 !< Calculo los terminos de la matriz de resultados numericos y
 !  los coloca en su sitio. La matriz se almacena en banda.
 subroutine constructMatriz(ancho,largo,matriz,n,m)
+    ! ------------- Variables ----------------- !
     real*8,dimension(n*m,n*m),intent(inout):: matriz
     real*8,intent(in):: ancho,largo
     integer,intent(in):: n,m
@@ -326,6 +412,7 @@ end subroutine
 
 !< Construye el vector de resultados numericos
 subroutine constructVector(largo,rigidez,vector,n,m)
+    ! ------------- Variables ----------------- !
     real*8,dimension(n*m),intent(inout):: vector
     real*8,intent(in):: largo,rigidez
     integer,intent(in):: n,m
@@ -359,6 +446,7 @@ end subroutine
 
 !< Factorización de Cholesky -> A = L * D * Transpose[L]
 subroutine fCholesky(matriz, n, m)
+    ! ------------- Variables ----------------- !
     real*8,dimension(n*m,n*m),intent(inout):: matriz
     integer:: k,i,j
     real*8:: suma
@@ -386,6 +474,7 @@ end subroutine
 
 !< Resolucion del sistema de ecuaciones para una matriz en banda factorizada
 subroutine linearSystem (matriz, f, n, m)
+    ! ------------- Variables ----------------- !
     real*8,dimension(n*m,n*m),intent(inout):: matriz
     real*8,dimension(n*m),intent(inout):: f
     integer,intent(in):: n, m
@@ -415,6 +504,7 @@ end subroutine
 
 !< Resolucion del sistema mediante el metodo de Navier
 subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
+    ! ------------- Variables ----------------- !
     real*8,intent(in):: ancho,largo
     real*8,intent(in):: rigidez
     real*8,dimension(m,n),intent(out):: w
@@ -426,11 +516,19 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
     real*8:: p_ku, w_ku
     real*8:: pi = acos(-1.0d0)
 
+    integer,dimension(2):: modif = 0
+    integer:: sel=1
+    integer:: h
+
     logical:: exists = .FALSE.                  !! existe el archivo de configuracion?
     character(len=50):: label                   !! etiquetas del archivo de configuracion
+    real*8:: numero
 
+    integer:: ios
     character(len=50):: resultsFile,configFile
     COMMON resultsFile,configFile
+
+    ! ************** Codigo ****************** !
 
     ! comprueba que se haya definido un archivo de configuracion y de que existe
     if(configFile /= '') then
@@ -442,22 +540,70 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
     end if
 
     if(exists) then
-        open(unit=24,file=configFile,status='old',action='read')
-        read(24,*) label
-        read(24,*) label,r
-        read(24,*) label,s
+        open(unit=24,file=configFile,status='old',action='read')    ! se abre
+        do while(ios>=0)
+            read(24,*,iostat=ios) label, numero
+
+            ! check if there were problems reading the file
+            if(ios < 0) then
+                write(*,*) "Fin de archivo"
+                continue
+            end if
+
+            ! check label reference
+            if(label=='r::') then
+                r = numero
+                modif(1) = 1
+            end if
+            if(label=='s::') then
+                s = numero
+                modif(2) = 1
+            end if
+        end do
         close(24)
 
         write(*,*) "Los datos de ",configFile," son:"
-        write(*,'(A,I4,I4,A)') "Número de iteraciones para el calculo analitico -> [r,s] = [",r,s,"]"
-    else
-        ! datos para el bucle de calculo de flecha
-        write(*,*) 'Número de iteraciones para el calculo analitico:'
-        write(*,'(A,$)') 'n (interger): '
-        read(*,*) r
-        write(*,'(A,$)') 'm (interger): '
-        read(*,*) s
+        write(*,'(A,I4,I4,A)') "Numero de iteraciones para el calculo analitico -> [r,s] = [",r,s,"]"
     end if
+
+    do while(sel==1)
+        ! datos para el bucle de calculo de flecha
+        if (modif(1) == 0 .OR. modif(2) == 0) then
+            write(*,*) "*************************"
+            write(*,*) "* NUMERO DE ITERACIONES *"
+            write(*,*) "*************************"
+            write(*,*) "-> Numero de iteraciones para el calculo analitico: "
+            if(modif(1) == 0) then
+                write(*,'(A,$)') 'r (interger): '
+                read(*,*) r; modif(1) = 1
+            end if
+            if(modif(2) == 0) then
+                write(*,'(A,$)') 's (interger): '
+                read(*,*) s; modif(2) = 1
+            end if
+        end if
+
+        ! cambiar valores si se han introducido valores a mano
+        ! si hay un archivo se entiende que el usuario no tiene
+        ! la necesidad de cambiar ningun dato.
+        if(.NOT.exists) then
+            call linea()
+            write(*,*) "Desea cambiar algun valor:"
+            write(*,*) "1) Si"
+            write(*,*) "2) No"
+            read(*,*) sel
+            if(sel==1) then
+                write(*,"(5X,A)") "Que valor desea cambiar?"
+                write(*,"(10X,A)") "1) r"
+                write(*,"(10X,A)") "2) s"
+                read(*,*) h
+                modif(h) = 0
+            end if
+        else
+            sel = 20
+        end if
+    end do
+
 
 
 
@@ -490,10 +636,6 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
                 end do
             end do
         end do
-    end do
-
-    do i=1,ubound(w,1)
-        write(*,'(*(f0.4,5x))') (w(i,j),j=1,ubound(w,2))
     end do
 
 end subroutine
