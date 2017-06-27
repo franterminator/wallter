@@ -11,7 +11,7 @@ Program WALLTER
     integer,dimension(2):: forma                !! forma de la matriz solucion
     integer,dimension(2):: orden = (/2,1/)      !! orden de los numeros al cambiar vector a matriz solucion
 
-    character(len=50):: resultsFile = './result/resultados.html'    !! directorio donde se escribiran los resultados
+    character(len=50):: resultsFile = './result/'    !! directorio donde se escribiran los resultados
     character(len=50):: configFile = ''                             !! directorio donde se encuentran los config file
     logical:: asserts = .FALSE.                 !! si se activa se imprimen los datos de la factorizacion
     logical:: exists                            !! comprueba la existencia de los directorios de resultados
@@ -24,7 +24,8 @@ Program WALLTER
 
     ! comprueba si existe el directorio de resultados
     inquire(file=resultsFile,exist=exists)
-    if(.NOT.exists) resultsFile = 'result.html' ! si no existe crea el archivo al lado del programa
+    if(.NOT.exists) resultsFile = 'resultados.html' ! si no existe crea el archivo al lado del programa
+    if(exists) resultsFile = TRIM(resultsFile) // TRIM('resultados.html')
 
     ! inicio del programa
     call commandLine(asserts)                   ! opciones de ejecucion
