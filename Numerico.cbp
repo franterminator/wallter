@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gfortran" />
-				<Option parameters="-a -c ./config/acero500_500_1cm.txt" />
+				<Option parameters="-a -c ./config/test.txt" />
 				<Option projectCompilerOptionsRelation="0" />
 				<Compiler>
 					<Add option="-Wall" />
@@ -27,14 +27,13 @@
 				<Option projectCompilerOptionsRelation="0" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-g" />
 				</Compiler>
-				<Linker>
-					<Add option="-s" />
-				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-g" />
 		</Compiler>
 		<Unit filename="main.f95">
 			<Option weight="0" />

@@ -8,8 +8,6 @@ Program WALLTER
     real*8,dimension(:,:),allocatable:: navier  !! vector terminos analiticos
 
     real*8, dimension(:,:),allocatable:: fMatriz!! solucion en forma matricial
-    integer,dimension(2):: forma                !! forma de la matriz solucion
-    integer,dimension(2):: orden = (/2,1/)      !! orden de los numeros al cambiar vector a matriz solucion
 
     character(len=50):: resultsFile = './result/'    !! directorio donde se escribiran los resultados
     character(len=50):: configFile = ''                             !! directorio donde se encuentran los config file
@@ -32,7 +30,7 @@ Program WALLTER
     call bienvenido()                           ! mensaje de bienvenida (header)
     call datos(ancho,largo,espesor,rigidez,n,m) ! datos para poder funcionar el programa
 
-    allocate(matriz(n*m,n*m))                   ! fija la matriz de resultados numericos
+    allocate(matriz(n*m,n+1))                   ! fija la matriz de resultados numericos
     call constructMatriz(ancho,largo,matriz,n,m)! construye la matriz para los resultados numericos
     allocate(f(n*m))                            ! fija el vector de resultados numericos
     call constructVector(largo,rigidez,f,n,m)   ! construye el vector para los resultados numericos
@@ -60,15 +58,13 @@ Program WALLTER
     end if
 
     ! cambio de vector a matriz solucion
-    allocate(fMatriz(m,n))
-    forma(1) = n
-    forma(2) = m
-    fMatriz = reshape(f,forma,order=orden)
+    allocate(fMatriz(n,m))
+    call vectorToMatrix(f,fMatriz,n,m)
     call printMatrix(fMatriz, 'Solucion numerica')
     call resNumericos(ancho,largo,fMatriz,n,m)
 
     ! calcula los resultados analiticos por Navier
-    allocate(navier(m,n))
+    allocate(navier(n,m))
     call analiticaNavier(navier,ancho,largo,rigidez,n,m)
     call printMatrix(navier, 'Solucion analitica')
     call resAnaliticos(ancho,largo,navier,n,m)
@@ -78,7 +74,7 @@ Program WALLTER
     read(*,*)
 
     contains
-    !< Imprime una linea, un texto centrado y una línea.
+    !< Imprime una linea, un texto centrado y una lï¿½nea.
     ! Creando como un titulo.
     subroutine header(label)
         character(len=*),intent(in):: label
@@ -122,7 +118,7 @@ Program WALLTER
     end subroutine
 End Program WALLTER
 
-!< Imprime una línea de 60 caracteres.
+!< Imprime una lï¿½nea de 60 caracteres.
 !  Se usa para separar la informacion que se imprime en la pantalla
 subroutine linea()
     write(*,*) "____________________________________________________________"
@@ -313,12 +309,12 @@ subroutine datos(ancho,largo,espesor,rigidez,n,m)
             write(*,*) "*   NUMERO DE PUNTOS    *"
             write(*,*) "*************************"
             if(modif(4)==0) then
-                write(*,*) "-> puntos para discretizar el ancho"
+                write(*,*) "-> puntos para discretizar el largo"
                 write(*,'(A,$)') "(integer) "
                 read(*,*) n; modif(4) = 1
             endif
             if(modif(5)==0) then
-                write(*,*) "-> puntos para discretizar el largo"
+                write(*,*) "-> puntos para discretizar el ancho"
                 write(*,'(A,$)') "(integer) "
                 read(*,*) m; modif(5) = 1
             endif
@@ -377,27 +373,24 @@ end subroutine
 !  los coloca en su sitio. La matriz se almacena en banda.
 subroutine constructMatriz(ancho,largo,matriz,n,m)
     ! ------------- Variables ----------------- !
-    real*8,dimension(n*m,n*m),intent(inout):: matriz
+    real*8,dimension(n*m,n+1),intent(inout):: matriz
     real*8,intent(in):: ancho,largo
     integer,intent(in):: n,m
 
     real*8:: A,B,C,deltaX,deltaY
-    integer:: i,j
+    integer:: i
 
     ! calculo de los coef A, B y C
-    deltaX = ancho / (n + 1)
-    deltaY = largo / (m + 1)
+    deltaX = ancho / (m + 1)
+    deltaY = largo / (n + 1)
     B = 1 / (deltaX**2)
     C = 1 / (deltaY**2)
     A = -2 * (B + C)
     write(*,'(A,3(f0.2,X),A)') "[A,B,C] -> [ ",A,B,C,"]"
 
     !matriz y vector a cero
-    do i=1,n*m
-        do j=1,n*m
-            matriz(i,j) = 0
-        end do
-    end do
+    matriz(:,:) = 0
+
 
     ! construccion matriz
     do i=1,n*m
@@ -417,56 +410,56 @@ subroutine constructVector(largo,rigidez,vector,n,m)
     real*8,dimension(n*m),intent(inout):: vector
     real*8,intent(in):: largo,rigidez
     integer,intent(in):: n,m
+    integer:: i,j,t
 
     real*8:: deltaY,presion
 
     ! vector a cero
-    do i=1,n*m
-        vector(i) = 0
-    end do
+    vector(:) = 0
 
-    deltaY = largo / (m + 1)
+    deltaY = largo / (n + 1)
 
     ! construccion vector
-    j = 1
-    do i=1,n*m
-        ! peso especifico agua = 10000 N / m3 -> 10 kN / m3
-        presion = 10*(largo/2-j*deltaY)/rigidez
+    t = 1
+    do j=1,m
+        do i=1,n
+            ! peso especifico agua = 10000 N / m3 -> 10 kN / m3
+            presion = 10*(largo/2-i*deltaY)/rigidez
 
-        !solo hasta la mitad
-        if (presion < 0) then
-            vector(i) = 0
-        else
-            vector(i) = presion
-        end if
-
-        ! las filas tienen la misma presion
-        if(mod(i,m) == 0) j = j + 1
+            !solo hasta la mitad
+            if (presion > 0 .AND. mod(t-1,n)==0) then
+                vector(t) = presion
+            end if
+            t = t + 1
+        end do
     end do
 end subroutine
 
-!< Factorización de Cholesky -> A = L * D * Transpose[L]
+!< Factorizaciï¿½n de Cholesky -> A = L * D * Transpose[L]
 subroutine fCholesky(matriz, n, m)
     ! ------------- Variables ----------------- !
-    real*8,dimension(n*m,n*m),intent(inout):: matriz
+    real*8,dimension(n*m,n+1),intent(inout):: matriz
     integer:: k,i,j
     real*8:: suma
 
     ! factorizacion de cholesky
     do k=1,n*m-1
-        do i=1,k
+        do i=k+1-n+1,k
+            if(i<1) cycle
             suma = 0
-            do j=1,i-1
+            do j=MAX(i-n,k+1-n),i-1
+                if(j<1) cycle
                 suma = suma + matriz(j,i-j+1)*matriz(j,k+2-j)
             end do
             matriz(i,k+2-i) = (matriz(i,k+2-i) - suma)
         end do
-        do i=1,k
+        do i=k+1-n,k
+            if(i<1) cycle
             matriz(i,k+2-i) = matriz(i,k+2-i)/matriz(i,1)
         end do
-
         suma = 0
-        do j=1,k
+        do j=k+1-n,k
+            if(j<1) cycle
             suma = suma + matriz(j,k+2-j)*matriz(j,1)*matriz(j,k+2-j)
         end do
         matriz(k+1,1) = matriz(k+1,1) - suma
@@ -484,7 +477,8 @@ subroutine linearSystem (matriz, f, n, m)
 
     do i=2,n*m
         suma = 0
-        do j=1,i-1
+        do j=i-n,i-1
+            if(j<1) cycle
             suma = suma + matriz(j,i-j+1)*f(j)
         end do
         f(i) = f(i) - suma
@@ -494,12 +488,11 @@ subroutine linearSystem (matriz, f, n, m)
         f(i) = f(i) / matriz(i,1)
     end do
 
-    do i=n*m-1,1,-1
-        suma = 0
-        do j=i+1,n*m
-            suma = suma + matriz(i,j-i+1)*f(j)
+    do i=n*m,2,-1
+        do j=i-n,i-1
+            if(j<1) cycle
+            f(j) = f(j) - matriz(j,i-j+1)*f(i)
         end do
-        f(i) = f(i) - suma
     end do
 end subroutine
 
@@ -508,7 +501,7 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
     ! ------------- Variables ----------------- !
     real*8,intent(in):: ancho,largo
     real*8,intent(in):: rigidez
-    real*8,dimension(m,n),intent(out):: w
+    real*8,dimension(n,m),intent(out):: w
     integer,intent(in):: n, m
 
     integer:: i, j, r, s
@@ -609,20 +602,18 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
 
 
     !calculamos deltaX y deltaY
-    deltaX = ancho / (n + 1)
-    deltaY = largo / (m + 1)
+    deltaX = ancho / (m + 1)
+    deltaY = largo / (n + 1)
 
     ! ceros en w
-    do i=1,n
-        do j=1,m
-            w(j,i) = 0
-        end do
-    end do
+    w(:,:) = 0
+
     !bucle para cada x e y
-    do i=1,n
-        X = i*deltaX
-        do j=1,m
-            Y = j*deltaY
+    do j=1,m
+        X = j*deltaX
+        do i=1,n
+            Y = i*deltaY
+
             !bucle para el calculo de la flecha
             do k=1,r
                 do u=1,s
@@ -633,7 +624,7 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
                     w_ku = w_ku**2
                     w_ku = p_ku / (pi**4 * rigidez * w_ku)
 
-                    w(j,i) = w(j,i) + w_ku * sin(k*pi*X/ancho) * sin(u*pi*Y/largo)
+                    w(i,j) = w(i,j) + w_ku * sin(k*pi*X/ancho) * sin(u*pi*Y/largo)
                 end do
             end do
         end do
@@ -641,3 +632,20 @@ subroutine analiticaNavier(w,ancho,largo,rigidez,n,m)
 
 end subroutine
 
+!< Convierte el vector soluciÃ³n en matriz
+subroutine vectorToMatrix(vector,matrix,n,m)
+    real*8,dimension(n*m),intent(in):: vector
+    real*8,dimension(n,m),intent(out):: matrix
+    integer:: i,j,t
+    ! llena la matriz con ceros
+    matrix(:,:)=0
+
+    ! coloca los elementos del vector en la correcta posicion en la matriz
+    t = 1           ! posicion en el vector
+    do j=1,m
+        do i=1,n
+            matrix(i,j) = vector(t)
+            t = t + 1
+        end do
+    end do
+end subroutine

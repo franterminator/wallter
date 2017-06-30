@@ -3,12 +3,12 @@
 #
 
 SRCS_f95d1 = \
-result.f95 \
-main.f95 
+main.f95 \
+result.f95 
 
 OBJS_f95d1 = \
-result.o \
-main.o 
+main.o \
+result.o 
 
 SRC_DIR_f95d1 = 
 OBJS_DIR = obj/Debug/
@@ -17,7 +17,7 @@ EXE_DIR = bin/Debug/
 EXE = Numerico.exe
 FC = mingw32-gfortran.exe
 IDIR = 
-CFLAGS = -Wall -Wall -g -Wall -g  -J$(OBJS_DIR) $(IDIR)
+CFLAGS = -Wall -g -Wall -g  -J$(OBJS_DIR) $(IDIR)
 LFLAGS = 
 LIBS = 
 
@@ -39,8 +39,8 @@ clean :
 	rm -f $(EXE_DIR)$(EXE)
 
 # Dependencies of files
-result.o: \
-    result.f95
 main.o: \
     main.f95
+result.o: \
+    result.f95
 

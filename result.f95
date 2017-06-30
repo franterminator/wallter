@@ -82,8 +82,8 @@ subroutine resNumericos(ancho,largo,fMatriz,n,m)
     character(len=50):: resultsFile,configFile
     COMMON resultsFile,configFile
 
-    deltaX = ancho / (n + 1)
-    deltaY = largo / (m + 1)
+    deltaX = ancho / (m + 1)
+    deltaY = largo / (n + 1)
 
     open(unit=12,file=resultsFile,status='old',position="append")
     write(12,'(10X,A)') '<div class="box-item" id="resultados">'
@@ -95,17 +95,17 @@ subroutine resNumericos(ancho,largo,fMatriz,n,m)
 
     do i=n,1,-1
         write(12,'(20X,A)') '<tr>'
-        write(12,'(25X,A,F0.3,A)') '<td class="td-h">',i*deltaX,'</td>'
+        write(12,'(25X,A,F0.3,A)') '<td class="td-h">',i*deltaY,'</td>'
         write(12,'(25X,*(A,f0.4,A))') ('<td>',fMatriz(i,j),'</td>',j=1,m)
         write(12,'(20X,A)') '</tr>'
     end do
 
     write(12,'(20X,A)') '<tr class="tr-h">'
     write(12,'(25X,A)') '<td>/</td>'
-    write(12,'(25X,*(A,F0.3,A))') ('<td>',j*deltaY,'</td>',j=1,m)
+    write(12,'(25X,*(A,F0.3,A))') ('<td>',j*deltaX,'</td>',j=1,m)
     write(12,'(20X,A)') '</tr>'
     write(12,'(20X,A)') '<tr class="tr-h">'
-    write(12,'(25X,A,I4,A)') '<td>O</td><td colspan="',n+1,'">X</td>'
+    write(12,'(25X,A,I4,A)') '<td>O</td><td colspan="',m+1,'">X</td>'
     write(12,'(20X,A)') '</tr>'
     write(12,'(15X,A)')'</table>'
     close(12)
@@ -122,8 +122,8 @@ subroutine resAnaliticos(ancho,largo,navier,n,m)
     character(len=50):: resultsFile,configFile
     COMMON resultsFile,configFile
 
-    deltaX = ancho / (n + 1)
-    deltaY = largo / (m + 1)
+    deltaX = ancho / (m + 1)
+    deltaY = largo / (n + 1)
 
     open(unit=12,file=resultsFile,status='old',position="append")
     write(12,'(15X,A)') '<table id="tAnalitico">'
@@ -133,17 +133,17 @@ subroutine resAnaliticos(ancho,largo,navier,n,m)
 
     do i=n,1,-1
         write(12,'(20X,A)') '<tr>'
-        write(12,'(25X,A,F0.3,A)') '<td class="td-h">',i*deltaX,'</td>'
+        write(12,'(25X,A,F0.3,A)') '<td class="td-h">',i*deltaY,'</td>'
         write(12,'(25X,*(A,f0.4,A))') ('<td>',navier(i,j),'</td>',j=1,m)
         write(12,'(20X,A)') '</tr>'
     end do
 
     write(12,'(20X,A)') '<tr class="tr-h">'
     write(12,'(25X,A)') '<td>/</td>'
-    write(12,'(25X,*(A,F0.3,A))') ('<td>',j*deltaY,'</td>',j=1,m)
+    write(12,'(25X,*(A,F0.3,A))') ('<td>',j*deltaX,'</td>',j=1,m)
     write(12,'(20X,A)') '</tr>'
     write(12,'(20X,A)') '<tr class="tr-h">'
-    write(12,'(25X,A,I4,A)') '<td>O</td><td colspan="',n+1,'">X</td>'
+    write(12,'(25X,A,I4,A)') '<td>O</td><td colspan="',m+1,'">X</td>'
     write(12,'(20X,A)') '</tr>'
     write(12,'(15X,A)')'</table>'
 
